@@ -2,6 +2,8 @@
 
 The purpose of CPV software is verification of concurrent programs. Designing and debugging an ordinary sequential program is already nontrivial task, and it is even more difficult to deal with concurrent programs. Concurrent Program Verifier can help you to understand the nature of concurrent programming, to play with concurrent behavior and, possibly, to avoid some common obstacles in real projects.
 
+![](cpv.png)
+
 Concurrent Program Verifier is not an enterprise-level system; it is designed for educational purposes only. CPV allows you to perform two basic tasks:
 
 * to develop your own concurrent program using a built-in flowchart editor;
