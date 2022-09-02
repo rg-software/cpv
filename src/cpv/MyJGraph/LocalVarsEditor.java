@@ -1,15 +1,13 @@
 package cpv.MyJGraph;
 
-import javax.swing.JDialog;
-import java.awt.HeadlessException;
-import java.awt.event.*;
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import cpv.*;
 
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 // Local Variables Editor window class
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 public class LocalVarsEditor extends BlockEditor
 {
     private JPanel panel1 = new JPanel();                     // window controls
@@ -24,7 +22,7 @@ public class LocalVarsEditor extends BlockEditor
 
     private boolean OKPressed = false;
 
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     // create an LVE window
     public LocalVarsEditor(Frame frame, String title, boolean modal, String oldtext)
     {
@@ -41,7 +39,7 @@ public class LocalVarsEditor extends BlockEditor
             ex.printStackTrace();
         }
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     // JBuilder auto-generated initialization routine
     private void jbInit() throws Exception
     {
@@ -75,24 +73,24 @@ public class LocalVarsEditor extends BlockEditor
         jPanel1.add(jScrollPane1, BorderLayout.CENTER);
         jScrollPane1.getViewport().add(TextArea, null);
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void OKButton_actionPerformed(ActionEvent e) // if OK button pressed
     {
         OKPressed = true;
-        hide();
+        setVisible(false);
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void CancelButton_actionPerformed(ActionEvent e)  // if Cancel button pressed
     {
         OKPressed = false;
-        hide();
+        setVisible(false);
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     public String GetResultingText()          // get variables text (as HTML)
     {
         return "<html>" + TextArea.getText().replaceAll("\n", "<br>") + "</html>";
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void TextArea_keyPressed(KeyEvent e)        // if ESC pressed, it is the same as Cancel
     {
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
@@ -100,7 +98,7 @@ public class LocalVarsEditor extends BlockEditor
         else if(e.getKeyCode() == KeyEvent.VK_M && e.isControlDown())
         	TextArea.ShowPopupMenu();
     }
-////////////////////////////////////////////////////////////////////////////////
+ //------------------------------------------------------------------------
     public boolean OKPressed()
     {
         return OKPressed;

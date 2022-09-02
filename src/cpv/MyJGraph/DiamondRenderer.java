@@ -1,23 +1,21 @@
 package cpv.MyJGraph;
 
-import org.jgraph.graph.VertexView;
-import org.jgraph.*;
-import org.jgraph.graph.*;
 import java.awt.*;
-import java.io.*;
+import org.jgraph.graph.*;
 
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 // Custom vertex renderer (refer to JGraph documentation for details)
 // provides painting of diamond-styled (branching) blocks
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 public class DiamondRenderer extends VertexRenderer
 {
+//------------------------------------------------------------------------	
     public void paint(Graphics g)       // repaint vertex
     {
         int b = borderWidth;
         Graphics2D g2 = (Graphics2D)g;
         Dimension d = getSize();
-        boolean tmp = selected;
+        boolean is_selected = selected;
 
         if (super.isOpaque())                     // draw a diamond
         {
@@ -38,7 +36,7 @@ public class DiamondRenderer extends VertexRenderer
         }
         finally
         {
-            selected = tmp;
+            selected = is_selected;
         }
 
         if (bordercolor != null)     // draw a border
@@ -60,11 +58,12 @@ public class DiamondRenderer extends VertexRenderer
         if (selected)       // draw selection
         {
             g2.setStroke(GraphConstants.SELECTION_STROKE);
-            g.setColor(graph.getHighlightColor());
+            g.setColor(highlightColor);
             g.drawLine(b - 1, (d.height - 1) / 2, (d.width - 1) / 2, b - 1);
             g.drawLine((d.width - 1) / 2, b - 1, d.width - b, (d.height - 1) / 2);
             g.drawLine(d.width - b, (d.height - 1) / 2, (d.width - 1) / 2, d.height - b);
             g.drawLine((d.width - 1) / 2, d.height - b, b - 1, (d.height - 1) / 2);
         }
     }
+//------------------------------------------------------------------------
 }

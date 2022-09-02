@@ -5,9 +5,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import cpv.*;
 
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 // Ordinary Block Editor
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 public class GenericBlockEditor extends BlockEditor 
 {
     private JPanel panel1 = new JPanel();
@@ -21,21 +21,24 @@ public class GenericBlockEditor extends BlockEditor
     private JTextField TextField = new ExtendedTextField();
     private boolean OKPressed = false;
 
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     public GenericBlockEditor(Frame frame, String title, boolean modal, String oldtext)
     {
         super(frame, title, modal);
-        try {
+        try 
+        {
             jbInit();
             pack();
         }
-        catch(Exception ex) {
+        catch(Exception ex) 
+        {
             ex.printStackTrace();
         }
         TextField.setText(oldtext);
     }
-////////////////////////////////////////////////////////////////////////////////
-    private void jbInit() throws Exception {
+  //------------------------------------------------------------------------
+    private void jbInit() throws Exception 
+    {
         panel1.setLayout(borderLayout1);
         OKButton.setText("OK");
         OKButton.addActionListener(new java.awt.event.ActionListener() {
@@ -67,27 +70,27 @@ public class GenericBlockEditor extends BlockEditor
         panel1.add(jPanel4,  BorderLayout.WEST);
         panel1.add(TextField, BorderLayout.CENTER);
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     public boolean OKPressed()
     {
         return OKPressed;
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     public String GetResultingText()
     {
         return TextField.getText();
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void OKButton_actionPerformed(ActionEvent e)
     {
         OKPressed = true;
-        hide();
+        setVisible(false);
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void CancelButton_actionPerformed(ActionEvent e)
     {
         OKPressed = false;
-        hide();
+        setVisible(false);
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 }

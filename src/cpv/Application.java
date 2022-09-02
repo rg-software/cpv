@@ -1,6 +1,5 @@
 package cpv;
 
-import javax.swing.UIManager;
 import java.awt.*;
 import cpv.Runner.*;
 
@@ -23,7 +22,6 @@ import cpv.Runner.*;
    02111-1307, USA.
 */
 
-////////////////////////////////////////////////////////////////////////////////
 public class Application    // main class
 {
     public static MainFrame frame;                     // main application frame
@@ -31,29 +29,23 @@ public class Application    // main class
     public static ILRunner therunner = new ILRunner(); // ILRunner instance
     public static String CurrentFileName = null;       // filename of the currently loaded program
 
-////////////////////////////////////////////////////////////////////////////////
-    //Construct the application
     public Application()
     {
         frame = new MainFrame();
         frame.validate();  // validate frame size
 
-        //Center the window
+        // Center the window
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension frameSize = frame.getSize();
-        if (frameSize.height > screenSize.height)
-            frameSize.height = screenSize.height;
-        if (frameSize.width > screenSize.width)
-            frameSize.width = screenSize.width;
+        frameSize.height = Math.min(frameSize.height, screenSize.height);
+        frameSize.width = Math.min(frameSize.width, screenSize.width);
 
         frame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
         frame.setVisible(true);
     }
-////////////////////////////////////////////////////////////////////////////////
-    //Main method
+
     public static void main(String[] args)
     {
         new Application();
     }
-////////////////////////////////////////////////////////////////////////////////
 }

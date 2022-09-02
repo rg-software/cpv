@@ -1,24 +1,22 @@
 package cpv.MyJGraph;
 
-import org.jgraph.graph.VertexView;
-import org.jgraph.*;
-import org.jgraph.graph.*;
 import java.awt.*;
-import java.io.*;
+import org.jgraph.graph.*;
 
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 // custom vertex renderer (refer to JGraph documentation for details)
 // provides painting of ellipse-styled vertices
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 public class EllipseRenderer extends VertexRenderer
 {
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     public void paint(Graphics g)           // paint an elliptic node
     {
         int b = borderWidth;
         Graphics2D g2 = (Graphics2D) g;
         Dimension d = getSize();
-        boolean tmp = selected;
+        boolean isSelected = selected;
+        
         if (super.isOpaque())                 // first draw an ellipse
         {
             g.setColor(super.getBackground());
@@ -32,6 +30,7 @@ public class EllipseRenderer extends VertexRenderer
 
             // IMPORTANT: in case of END block, output text in the centre of the block
             // otherwise use top-left alignment
+            
             if(getText().equals("end"))
                 super.paint(g);                // alignment: centre
             else                               // alignment: top-left
@@ -47,7 +46,7 @@ public class EllipseRenderer extends VertexRenderer
         }
         finally
         {
-            selected = tmp;
+            selected = isSelected;
         }
 
         if (bordercolor != null)                  // draw selection
@@ -60,8 +59,9 @@ public class EllipseRenderer extends VertexRenderer
         if (selected)
         {
             g2.setStroke(GraphConstants.SELECTION_STROKE);
-            g.setColor(graph.getHighlightColor());
+            g.setColor(highlightColor);
             g.drawOval(b - 1, b - 1, d.width - b, d.height - b);
         }
     }
+//------------------------------------------------------------------------
 }

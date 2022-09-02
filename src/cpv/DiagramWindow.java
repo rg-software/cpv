@@ -3,14 +3,11 @@ package cpv;
 import cpv.MyJGraph.*;
 import javax.swing.*;
 import java.awt.*;
-import com.jgraph.*;
 import java.awt.event.*;
-import java.util.*;
-import cpv.Runner.*;
 import java.io.*;
 
 ////////////////////////////////////////////////////////////////////////////////
-public class DiagramWindow extends MyInternalFrame  // window for state space diagram
+public class DiagramWindow extends MyInternalFrame  // window for the state space diagram
 {
     private JPanel jPanel1 = new JPanel();                     //
     private JScrollPane jScrollPane1 = new JScrollPane();      //   window
