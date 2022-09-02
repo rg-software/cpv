@@ -1,6 +1,6 @@
 package cpv.MyJGraph;
 
-import com.jgraph.graph.*;
+import org.jgraph.graph.*;
 import java.io.*;
 import javax.swing.*;
 import java.util.regex.*;

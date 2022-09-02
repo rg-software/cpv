@@ -1,10 +1,12 @@
 package cpv.MyJGraph;
 
 import cpv.*;
-import com.jgraph.JGraph;
+import org.jgraph.JGraph;
 import javax.accessibility.*;
-import com.jgraph.graph.*;
+import org.jgraph.graph.*;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.awt.Point;
 import java.awt.*;
 import javax.swing.*;
 import java.util.*;
@@ -66,7 +68,7 @@ public class EJGraph extends GenericJGraph
         	if(editor.OKPressed())             // if edition succeded
         	{
             	Map nest = new Hashtable();
-            	Map attr = GraphConstants.createMap();
+            	Map attr = new Hashtable();//GraphConstants.createMap();
             	GraphConstants.setValue(attr, editor.GetResultingText());   // modify cell data
             	nest.put((MyGraphCell)cell, attr);        // (refer to JGraph documentation)
             	getModel().edit(nest, null, null, null);
@@ -87,8 +89,8 @@ public class EJGraph extends GenericJGraph
             }
             else if(e.getClickCount() == 1)  // on single click get starting port
             {
-                Point tmp = fromScreen(new Point(e.getPoint()));
-                PortView pv = getPortViewAt(tmp.x, tmp.y);        // get portview under mouse pointer
+                Point2D tmp = fromScreen(new Point(e.getPoint()));
+                PortView pv = getPortViewAt(tmp.getX(), tmp.getY());        // get portview under mouse pointer
                 // if there IS a port under mouse pointer and it is NOT VarsCell's port, make a reference to this port
                 // StartPort is used for arrow creation; see also MouseDragged() and MouseReleased()
                 StartPort = (pv != null && getModel().getParent((Port)pv.getCell()) != VarsCell) ? pv : null;
@@ -102,8 +104,8 @@ public class EJGraph extends GenericJGraph
     {
         if(SwingUtilities.isLeftMouseButton(e))
         {
-            Point tmp = fromScreen(new Point(e.getPoint()));
-            PortView pv = getPortViewAt(tmp.x, tmp.y);
+            Point2D tmp = fromScreen(new Point(e.getPoint()));
+            PortView pv = getPortViewAt(tmp.getX(), tmp.getY());
             // get an EndPort - the port of the destination cell
             PortView EndPort = (pv != null && getModel().getParent((Port)pv.getCell()) != VarsCell) ? pv : null;
 
@@ -126,8 +128,8 @@ public class EJGraph extends GenericJGraph
 ////////////////////////////////////////////////////////////////////////////////
     public void MouseMoved(MouseEvent e)                       // OnMouseMove event handler
     {
-        Point tmp = fromScreen(new Point(e.getPoint()));
-        PortView pv = getPortViewAt(tmp.x, tmp.y);             // get a port under mouse pointer
+        Point2D tmp = fromScreen(new Point(e.getPoint()));
+        PortView pv = getPortViewAt(tmp.getX(), tmp.getY());             // get a port under mouse pointer
 
         CurrentX = e.getX();          // get current coordinates
         CurrentY = e.getY();
@@ -158,7 +160,7 @@ public class EJGraph extends GenericJGraph
         MouseMoved(e);                     // do MouseMoved() stuff
 
         Point NewEnd = e.getPoint();       // new current point
-        Point Start;
+        Point2D Start;
 
         if (StartPort != null)      // if starting port is valid
         {
@@ -170,7 +172,7 @@ public class EJGraph extends GenericJGraph
 
             g.setColor(Configuration.JGRAPH_DEFAULT_EDGE_COLOR);    // erase arrow, painted on the previous step
             g.setXORMode(getBackground());
-            g.drawLine(Start.x, Start.y, OldEnd.x, OldEnd.y);
+            g.drawLine(Start.getX(), Start.getY(), OldEnd.getX(), OldEnd.getY());
 
             g.setColor(getBackground());                     // draw a new one
             g.setXORMode(Configuration.JGRAPH_DEFAULT_EDGE_COLOR);
@@ -217,7 +219,7 @@ public class EJGraph extends GenericJGraph
     public void MarkAsStarting(Object cell)  // mark given cell as starting
     {
         Map nest = new Hashtable();
-        Map attr = GraphConstants.createMap();
+        Map attr = new Hashtable();//GraphConstants.createMap();
         GraphConstants.setBorderColor(attr, Configuration.JGRAPH_DEFAULT_BORDER_COLOR);
 
         Object[] roots = getRoots();                 // get all cells in the graph
@@ -228,7 +230,7 @@ public class EJGraph extends GenericJGraph
         getModel().edit(nest, null, null, null);  // apply changes
 
         nest = new Hashtable();
-        attr = GraphConstants.createMap();
+        attr = new Hashtable();//GraphConstants.createMap();
         GraphConstants.setBorderColor(attr, Configuration.EJGRAPH_SELECTED_BORDER_COLOR);
         nest.put(cell, attr);
         if(cell != VarsCell)                          // mark selected cell as starting

@@ -1,8 +1,8 @@
 package cpv.MyJGraph;
 
-import com.jgraph.graph.EdgeView;
-import com.jgraph.graph.*;
-import com.jgraph.*;
+//import org.jgraph.graph.EdgeView;
+import org.jgraph.graph.*;
+import org.jgraph.*;
 import java.awt.geom.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -26,13 +26,13 @@ class MyEdgeRenderer extends EdgeRenderer
         final double loopangle = Math.PI / 6;
         
         //Point SrcPoint = ((PortView)view.getSource()).getLocation(null);
-        Point DestPoint = ((PortView)view.getTarget()).getLocation(null);         // get destination point
+        Point2D DestPoint = ((PortView)view.getTarget()).getLocation(null);         // get destination point
         //MyVertexView SrcView = (MyVertexView)view.getSource().getParentView();
         MyVertexView DestView = (MyVertexView)view.getTarget().getParentView();   // get destination view
 
         String lab = view.getGraph().convertValueToString(view).toString();       // get edge label
-        Point P0 = view.getPoint(view.getPointCount() - 2);       // get two last points
-        Point P1 = view.getPoint(view.getPointCount() - 1);
+        Point2D P0 = view.getPoint(view.getPointCount() - 2);       // get two last points
+        Point2D P1 = view.getPoint(view.getPointCount() - 1);
         Point PM;                                                 // middle points
 
         Path.reset();
@@ -50,7 +50,7 @@ class MyEdgeRenderer extends EdgeRenderer
 				LoopEdgesCount++;
 			}
         	
-        	Rectangle r = DestView.getBounds();
+        	Rectangle2D r = DestView.getBounds();
             Point centre = new Point((int)(r.getX() + r.getWidth() / 2), (int)(r.getY() + r.getHeight() / 2));
 			double L = Math.sqrt(r.getWidth() * r.getWidth() + r.getHeight() * r.getHeight());
 			
@@ -61,10 +61,10 @@ class MyEdgeRenderer extends EdgeRenderer
         else if(lab.equals("single"))  // in case of single edge make it straight
         {
 	        // only straight line supports middle points
-	        Path.moveTo(view.getPoint(0).x, view.getPoint(0).y);    // move to the first point
+	        Path.moveTo(view.getPoint(0).getX(), view.getPoint(0).getY());    // move to the first point
 
     	    for(int i = 1; i < view.getPointCount() - 1; i++)
-        	    Path.lineTo(view.getPoint(i).x, view.getPoint(i).y);   // make a segmented line to the point number N_of_points - 2
+        	    Path.lineTo(view.getPoint(i).getX(), view.getPoint(i).getY());   // make a segmented line to the point number N_of_points - 2
 
             PM = new Point((P0.x + P1.x) / 2, (P0.y + P1.y) / 2);     // calculate the middle point
         }
@@ -81,13 +81,13 @@ class MyEdgeRenderer extends EdgeRenderer
             P1 = DestView.getPerimeterPoint(DestPoint, PM);        // recalculate the last point
         }
 
-        Path.moveTo(P0.x, P0.y);
-        Path.quadTo(PM.x, PM.y, P1.x, P1.y);                   // use curved route
+        Path.moveTo(P0.getX(), P0.getY());
+        Path.quadTo(PM.x, PM.y, P1.getX(), P1.getY());                   // use curved route
 
-        beginShape = new Rectangle(P0);                        // create arrow starting shape
-        endShape = createLineEnd(endSize, endDeco, PM, P1);    // create arrow ending
-        lineShape = (Shape)Path.clone();
-        Path.append(endShape, true);
+        view.beginShape = new Rectangle(P0);                        // create arrow starting shape
+        view.endShape = createLineEnd(endSize, endDeco, PM, P1);    // create arrow ending
+        view.lineShape = (Shape)Path.clone();
+        Path.append(view.endShape, true);
 
         return Path;                                           // return the ready arrow
     }

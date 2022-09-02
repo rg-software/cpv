@@ -1,9 +1,11 @@
 package cpv.MyJGraph;
 
-import com.jgraph.JGraph;
-import com.jgraph.graph.*;
+import org.jgraph.JGraph;
+import org.jgraph.graph.*;
 import java.io.*;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
@@ -36,22 +38,24 @@ public class GenericJGraph extends JGraph
     {
         MyGraphCell vertex = new MyGraphCell(type, text);       // create new block
         Hashtable attributes = new Hashtable();
-
+ 
         // create attributes
         if(type == MyGraphCell.BRANCHING)      // if this block is branching block
         {
-            Map newmap = GraphConstants.createMap();
-            GraphConstants.setOffset(newmap, new Point(GraphConstants.PERCENT, GraphConstants.PERCENT / 2));
+        	int PERCENT = GraphConstants.PERMILLE / 10;
+        	
+            Map newmap = new Hashtable();//GraphConstants.createMap();
+            GraphConstants.setOffset(newmap, new Point(PERCENT, PERCENT / 2));
             DefaultPort port = new DefaultPort("right");  // three ports will be available:
             attributes.put(port, newmap);                 // "right", "left" and "up"
             vertex.add(port);
-            newmap = GraphConstants.createMap();
-            GraphConstants.setOffset(newmap, new Point(0, GraphConstants.PERCENT / 2));
+            newmap = new Hashtable();//GraphConstants.createMap();
+            GraphConstants.setOffset(newmap, new Point(0, PERCENT / 2));
             port = new DefaultPort("left");
             attributes.put(port, newmap);
             vertex.add(port);
-            newmap = GraphConstants.createMap();
-            GraphConstants.setOffset(newmap, new Point(GraphConstants.PERCENT / 2, 0));
+            newmap = new Hashtable();//Constants.createMap();
+            GraphConstants.setOffset(newmap, new Point(PERCENT / 2, 0));
             port = new DefaultPort("up");
             attributes.put(port, newmap);
             vertex.add(port);
@@ -60,10 +64,10 @@ public class GenericJGraph extends JGraph
             vertex.add(new DefaultPort("central"));
 
         // apply attributes
-        Point point = snap(new Point(X, Y));
+        Point2D point = snap(new Point(X, Y));
         Dimension size = new Dimension(width, height);
-        Map map = GraphConstants.createMap();
-        GraphConstants.setBounds(map, new Rectangle(point, size));
+        Map map = new Hashtable();//GraphConstants.createMap();
+        GraphConstants.setBounds(map, new Rectangle(new Point((int)point.getX(), (int)point.getY()), size));
         GraphConstants.setBorderColor(map, bcolor);
         GraphConstants.setBackground(map, Configuration.JGRAPH_DEFAULT_BACKGROUND_COLOR);
         GraphConstants.setOpaque(map, true);
@@ -83,7 +87,7 @@ public class GenericJGraph extends JGraph
     {
         ConnectionSet cs = new ConnectionSet();         // standard JGraph way (refer to documentation)
         cs.connect(edge, source, target);
-        Map map = GraphConstants.createMap();
+        Map map = new Hashtable();//GraphConstants.createMap();
         GraphConstants.setLineEnd(map, GraphConstants.ARROW_TECHNICAL);
         Hashtable attributes = new Hashtable();
         attributes.put(edge, map);
@@ -235,7 +239,7 @@ public class GenericJGraph extends JGraph
             {
                 Map attrs = (Map)viewAttributes.get(objects[i]);    // get parameters
 
-                Rectangle r = GraphConstants.getBounds(attrs);              // bounding rectangle
+                Rectangle2D r = GraphConstants.getBounds(attrs);              // bounding rectangle
                 String lab = convertValueToString(objects[i]).toString();   // label
                 int type = ((MyGraphCell)objects[i]).getType();                  // type
                 int tag = ((MyGraphCell)objects[i]).getTag();                    // tag

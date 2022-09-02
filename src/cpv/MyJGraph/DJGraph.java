@@ -1,9 +1,9 @@
 package cpv.MyJGraph;
 
 import cpv.*;
-import com.jgraph.JGraph;
+import org.jgraph.JGraph;
 import javax.accessibility.*;
-import com.jgraph.graph.*;
+import org.jgraph.graph.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;

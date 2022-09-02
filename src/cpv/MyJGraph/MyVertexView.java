@@ -1,9 +1,10 @@
 package cpv.MyJGraph;
 
-import com.jgraph.graph.VertexView;
-import com.jgraph.*;
-import com.jgraph.graph.*;
+import org.jgraph.graph.VertexView;
+import org.jgraph.*;
+import org.jgraph.graph.*;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.io.*;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +18,8 @@ public class MyVertexView extends VertexView
 ////////////////////////////////////////////////////////////////////////////////
     public MyVertexView(Object v, JGraph p1, CellMapper cm)           // standard constructor
     {
-        super(v, p1, cm);
+        super(v);
+        //, p1, cm);
         Vertex = (MyGraphCell)v;
     }
 ////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +42,7 @@ public class MyVertexView extends VertexView
 ////////////////////////////////////////////////////////////////////////////////
     private Point gppBEGIN_END(Point source, Point p)   // getPerimeterPoint() taken from JGraphPad
     {                                                   // used for elliptic nodes
-        Rectangle r = getBounds();
+        Rectangle2D r = getBounds();
 
         double x = r.getX();
         double y = r.getY();
@@ -105,7 +107,7 @@ public class MyVertexView extends VertexView
     {                                                         // between two given points (inside and outside)
         switch(Vertex.getType())
         {
-            case MyGraphCell.GENERIC:   return super.getPerimeterPoint(source, p);  // use standard getPerimeterPoint()
+            case MyGraphCell.GENERIC:   return super.getPerimeterPoint(source, p.);  // use standard getPerimeterPoint()
             case MyGraphCell.BRANCHING: return source;                              // just a source point in case of diamond node
             case MyGraphCell.BEGIN_END: return gppBEGIN_END(source, p);             // use getPerimeterPoint() for elliptic node
         }

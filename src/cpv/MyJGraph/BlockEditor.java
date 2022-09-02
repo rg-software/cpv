@@ -1,7 +1,7 @@
 package cpv.MyJGraph;
 
 import javax.swing.JDialog;
-import java.awt.*;
+import java.awt.Frame;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Parent class for block editors

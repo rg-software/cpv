@@ -1,8 +1,8 @@
 package cpv.MyJGraph;
 
-import com.jgraph.graph.EdgeView;
-import com.jgraph.graph.*;
-import com.jgraph.*;
+import org.jgraph.graph.EdgeView;
+import org.jgraph.graph.*;
+import org.jgraph.*;
 import java.awt.geom.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -17,7 +17,8 @@ public class MyEdgeView extends EdgeView
 ////////////////////////////////////////////////////////////////////////////////
     public MyEdgeView(Object cell, JGraph graph, CellMapper mapper)     // standard MyEdgeView functions
     {
-        super(cell, graph, mapper);
+        super(cell);
+        //, graph, mapper);
     }
 ////////////////////////////////////////////////////////////////////////////////
     public CellViewRenderer getRenderer()

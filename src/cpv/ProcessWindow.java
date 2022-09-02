@@ -1,6 +1,6 @@
 package cpv;
 
-import com.jgraph.JGraph;
+import org.jgraph.JGraph;
 import java.awt.*;
 import java.awt.event.*;
 import com.jgraph.*;
@@ -9,7 +9,7 @@ import cpv.MyJGraph.*;
 import java.io.*;
 import java.beans.*;
 import java.util.*;
-import com.jgraph.graph.*;
+import org.jgraph.graph.*;
 
 ////////////////////////////////////////////////////////////////////////////////
 // window for the flowchart

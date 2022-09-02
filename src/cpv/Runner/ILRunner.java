@@ -1,7 +1,7 @@
 package cpv.Runner;
 
 import java.util.*;
-import com.jgraph.graph.*;
+import org.jgraph.graph.*;
 import cpv.*;
 import cpv.MyJGraph.*;
 import java.awt.*;

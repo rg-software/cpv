@@ -1,8 +1,8 @@
 package cpv.MyJGraph;
 
-import com.jgraph.graph.VertexView;
-import com.jgraph.*;
-import com.jgraph.graph.*;
+import org.jgraph.graph.VertexView;
+import org.jgraph.*;
+import org.jgraph.graph.*;
 import java.awt.*;
 import java.io.*;
 

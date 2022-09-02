@@ -1,15 +1,15 @@
 package cpv.MyJGraph;
 
-import com.jgraph.graph.BasicMarqueeHandler;
+import org.jgraph.graph.BasicMarqueeHandler;
 import java.awt.Point;
-import com.jgraph.graph.PortView;
+import org.jgraph.graph.PortView;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
 import java.awt.Graphics;
 import java.awt.Color;
-import com.jgraph.graph.Port;
+import org.jgraph.graph.Port;
 import java.awt.Cursor;
-import com.jgraph.graph.GraphConstants;
+import org.jgraph.graph.GraphConstants;
 import java.awt.Rectangle;
 
 ////////////////////////////////////////////////////////////////////////////////
