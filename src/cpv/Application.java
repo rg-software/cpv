@@ -1,6 +1,5 @@
 package cpv;
 
-//
 import java.awt.*;
 
 import java.awt.geom.*;
@@ -13,7 +12,6 @@ import org.jgraph.graph.*;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import cpv.Runner.*;
-//
 
 
 
@@ -62,8 +60,8 @@ public class Application    // main class
     public static void main(String[] args)
     {
     	// turn antialiasing on
-    	System.setProperty("awt.useSystemAAFontSettings","on");
-    	System.setProperty("swing.aatext", "true");
+    	//System.setProperty("awt.useSystemAAFontSettings","on");
+    	//System.setProperty("swing.aatext", "true");
         new Application();
     	
     	

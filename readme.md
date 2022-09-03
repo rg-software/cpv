@@ -77,3 +77,5 @@ https://github.com/JFormDesigner/FlatLaf/tree/main/flatlaf-intellij-themes#theme
 https://www.formdev.com/flatlaf/themes/
 Also, Jgraph 5
 https://github.com/jgraph/legacy-jgraph5
+
+java.exe" -Dsun.java2d.uiScale.enabled=false  -jar cpv.jar

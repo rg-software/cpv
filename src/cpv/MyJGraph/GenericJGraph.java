@@ -61,20 +61,20 @@ public class GenericJGraph extends JGraph
         // create attributes
         if(type == MyGraphCell.BRANCHING)      // if this block is branching block
         {
-        	int PERCENT = GraphConstants.PERMILLE / 10;
+        	//int PERCENT = GraphConstants.PERMILLE / 10;
         	
             var newmap = new AttributeMap();//GraphConstants.createMap();
-            GraphConstants.setOffset(newmap, new Point(PERCENT, PERCENT / 2));
+            GraphConstants.setOffset(newmap, new Point(GraphConstants.PERMILLE, GraphConstants.PERMILLE / 2));
             DefaultPort port = new DefaultPort("right");  // three ports will be available:
             attributes.put(port, newmap);                 // "right", "left" and "up"
             vertex.add(port);
             newmap = new AttributeMap();//GraphConstants.createMap();
-            GraphConstants.setOffset(newmap, new Point(0, PERCENT / 2));
+            GraphConstants.setOffset(newmap, new Point(0, GraphConstants.PERMILLE / 2));
             port = new DefaultPort("left");
             attributes.put(port, newmap);
             vertex.add(port);
             newmap = new AttributeMap();//Constants.createMap();
-            GraphConstants.setOffset(newmap, new Point(PERCENT / 2, 0));
+            GraphConstants.setOffset(newmap, new Point(GraphConstants.PERMILLE / 2, 0));
             port = new DefaultPort("up");
             attributes.put(port, newmap);
             vertex.add(port);

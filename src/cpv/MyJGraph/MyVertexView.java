@@ -101,6 +101,7 @@ public class MyVertexView extends VertexView
         return new Point((int)xout, (int)yout);
     }
 //------------------------------------------------------------------------
+    // TODO(mm): fix ellipse and branching!
     public Point getPerimeterPoint(EdgeView e, Point source, Point p)     // returns a point that is on a border of a node
     {                                                         // between two given points (inside and outside)
     	switch(Vertex.getType())	// TODO(mm): update deprecated getPerimeterPoint()
