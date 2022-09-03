@@ -101,11 +101,12 @@ public class MyVertexView extends VertexView
         return new Point((int)xout, (int)yout);
     }
 //------------------------------------------------------------------------
-    public Point getPerimeterPoint(Point source, Point p)     // returns a point that is on a border of a node
+    public Point getPerimeterPoint(EdgeView e, Point source, Point p)     // returns a point that is on a border of a node
     {                                                         // between two given points (inside and outside)
     	switch(Vertex.getType())	// TODO(mm): update deprecated getPerimeterPoint()
         {
-            case MyGraphCell.GENERIC:   return (Point)super.getPerimeterPoint(source, p);  // use standard getPerimeterPoint()
+            case MyGraphCell.GENERIC:   var p2d = super.getPerimeterPoint(null, source, p);
+            							return new Point((int)p2d.getX(), (int)p2d.getY());  // use standard getPerimeterPoint()
             case MyGraphCell.BRANCHING: return source;                              // just a source point in case of diamond node
             case MyGraphCell.BEGIN_END: return gppBEGIN_END(source, p);             // use getPerimeterPoint() for elliptic node
         }

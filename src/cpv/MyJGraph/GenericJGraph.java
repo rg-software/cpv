@@ -45,6 +45,9 @@ public class GenericJGraph extends JGraph
     {
         super(model, new MyLayoutCache(model)); // use default graph model
         setEditable(false);                             // forbid editing
+        setAntiAliased(true);
+        //setScale(2);
+//        setPreferredSize(new Dimension(1500,1500));
     }
 	//------------------------------------------------------------------------
 //------------------------------------------------------------------------

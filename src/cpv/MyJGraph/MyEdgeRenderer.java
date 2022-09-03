@@ -29,7 +29,11 @@ class MyEdgeRenderer extends EdgeRenderer
         //MyVertexView SrcView = (MyVertexView)view.getSource().getParentView();
         MyVertexView DestView = (MyVertexView)view.getTarget().getParentView();   // get destination view
 
-        String lab = view.toString();// correct?
+        //System.out.println();
+        String lab = view.getCell().toString();//view.toString();// correct?
+        
+        //System.out.println(view.getParentView().toString());
+        
         //String lab = ((JGraph)this.graph.get()).convertValueToString(view).toString();       // get edge label
         Point2D P0 = view.getPoint(view.getPointCount() - 2);       // get two last points
         Point2D P1 = view.getPoint(view.getPointCount() - 1);
@@ -54,8 +58,8 @@ class MyEdgeRenderer extends EdgeRenderer
             Point centre = new Point((int)(r.getX() + r.getWidth() / 2), (int)(r.getY() + r.getHeight() / 2));
 			double L = Math.sqrt(r.getWidth() * r.getWidth() + r.getHeight() * r.getHeight());
 			
-			P0 = DestView.getPerimeterPoint(null, new Point((int)(centre.x + L * Math.cos(loopangle * LoopEdgesCount)), (int)(centre.y + L * Math.sin(loopangle * LoopEdgesCount))));
-			P1 = DestView.getPerimeterPoint(null, new Point((int)(centre.x + L * Math.cos(loopangle * (LoopEdgesCount + 1))), (int)(centre.y + L * Math.sin(loopangle * (LoopEdgesCount + 1)))));
+			P0 = DestView.getPerimeterPoint(null, null, new Point((int)(centre.x + L * Math.cos(loopangle * LoopEdgesCount)), (int)(centre.y + L * Math.sin(loopangle * LoopEdgesCount))));
+			P1 = DestView.getPerimeterPoint(null, null, new Point((int)(centre.x + L * Math.cos(loopangle * (LoopEdgesCount + 1))), (int)(centre.y + L * Math.sin(loopangle * (LoopEdgesCount + 1)))));
 			PM = new Point((int)(centre.x + loopcoeff * r.getWidth() * Math.cos(loopangle * (LoopEdgesCount + 0.5))), (int)(centre.y + loopcoeff * r.getWidth() * Math.sin(loopangle * (LoopEdgesCount + 0.5))));
         }
         else if(lab.equals("single"))  // in case of single edge make it straight
@@ -79,7 +83,11 @@ class MyEdgeRenderer extends EdgeRenderer
             PM = new Point((int)XM, (int)YM);                                // calculate the middle point
             // P0 = SrcView.getPerimeterPoint(PM, SrcPoint);
             // TODO(mm): use getPerimeterPoint(EdgeView edge, Point2D source, Point2D p)
-            P1 = DestView.getPerimeterPoint(DestPoint, PM);        // recalculate the last point
+            
+            var P1my = new Point((int)DestPoint.getX(), (int)DestPoint.getY());
+            P1 = DestView.getPerimeterPoint(null, P1my, PM);
+            //P1 = DestView.getPerimeterPoint(DestPoint, PM);        // recalculate the last point
+            //DestView.getper
         }
 
         Path.moveTo(P0.getX(), P0.getY());
@@ -94,7 +102,7 @@ class MyEdgeRenderer extends EdgeRenderer
         return Path;                                           // return the ready arrow
     }
 //------------------------------------------------------------------------
-    protected void paintLabel(Graphics g, String label)  // no label to paint, so just exit
+    protected void paintLabel(Graphics g, String label, Point2D p, boolean mainLabel)  // no label to paint, so just exit
     {
     }
 //------------------------------------------------------------------------
