@@ -9,6 +9,11 @@ import cpv.*;
 //------------------------------------------------------------------------
 public class DJGraph extends GenericJGraph
 {
+	public DJGraph()
+	{
+		super(new DefaultGraphModel());
+	}
+	
     public DefaultPort insert(Point point, String text) // Insert a new vertex at the given point using given label
     {
         MyGraphCell cell = InsertBlock(point.x, point.y, MyGraphCell.BEGIN_END, text, 

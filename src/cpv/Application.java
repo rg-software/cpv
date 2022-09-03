@@ -1,6 +1,7 @@
 package cpv;
 
 import java.awt.*;
+import com.formdev.flatlaf.FlatLightLaf;
 import cpv.Runner.*;
 
 /* Concurrent Programs Verifier
@@ -31,9 +32,10 @@ public class Application    // main class
 
     public Application()
     {
+    	FlatLightLaf.setup();
         frame = new MainFrame();
         frame.validate();  // validate frame size
-
+        
         // Center the window
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension frameSize = frame.getSize();

@@ -13,7 +13,7 @@ public class MyEdgeView extends EdgeView
     static MyEdgeRenderer renderer = new MyEdgeRenderer();
 
 //------------------------------------------------------------------------
-    public MyEdgeView(Object cell, JGraph graph, CellMapper mapper)     // standard MyEdgeView functions
+    public MyEdgeView(Object cell)//, JGraph graph, CellMapper mapper)     // standard MyEdgeView functions
     {
         super(cell);
         //, graph, mapper);

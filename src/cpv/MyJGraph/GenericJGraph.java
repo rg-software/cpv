@@ -14,22 +14,40 @@ import cpv.*;
 //------------------------------------------------------------------------
 public class GenericJGraph extends JGraph
 {
+	static class MyCellViewFactory extends DefaultCellViewFactory
+	{
+	    protected VertexView createVertexView(Object v)//, CellMapper cm)   // provide a custom vertex view
+	    {
+	        return new MyVertexView(v);//, this, cm);
+	    }
+	    protected EdgeView createEdgeView(Object e)//, CellMapper cm)  // provide also custom edge view
+	    {                                                           // (straight / curved)
+	        return new MyEdgeView(e);//, this, cm);
+	    }
+	}
+
+	static class MyLayoutCache extends GraphLayoutCache
+	{
+		public MyLayoutCache(GraphModel model)
+		{
+			super(model, new MyCellViewFactory());
+		}
+//			GraphLayoutCache view = new GraphLayoutCache(model,
+	//			new DefaultCellViewFactory());
+				//JGraph graph = new JGraph(model, view);
+				//DefaultGraphCell[] cells = new DefaultGraph
+
+	}
+	
+		
 //------------------------------------------------------------------------
-    protected GenericJGraph()
+    protected GenericJGraph(GraphModel model)
     {
-        super(new DefaultGraphModel());                 // use default graph model
+        super(model, new MyLayoutCache(model)); // use default graph model
         setEditable(false);                             // forbid editing
     }
+	//------------------------------------------------------------------------
 //------------------------------------------------------------------------
-    protected VertexView createVertexView(Object v, CellMapper cm)   // provide a custom vertex view
-    {
-        return new MyVertexView(v, this, cm);
-    }
-//------------------------------------------------------------------------
-    protected EdgeView createEdgeView(Object e, CellMapper cm)  // provide also custom edge view
-    {                                                           // (straight / curved)
-        return new MyEdgeView(e, this, cm);
-    }
 //------------------------------------------------------------------------
     // generic InsertBlock routine; returns just inserted block
     protected MyGraphCell InsertBlock(int X, int Y, int type, String text, int width, int height, Color bcolor)

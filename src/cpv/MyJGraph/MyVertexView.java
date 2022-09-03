@@ -14,7 +14,7 @@ public class MyVertexView extends VertexView
     static EllipseRenderer BeginEndRenderer = new EllipseRenderer();  // two custom renderers
     static DiamondRenderer BranchingRenderer = new DiamondRenderer();
 //------------------------------------------------------------------------
-    public MyVertexView(Object v, JGraph p1, CellMapper cm)           // standard constructor
+    public MyVertexView(Object v)//;//, JGraph p1, CellMapper cm)           // standard constructor
     {
         super(v);
         //, p1, cm);

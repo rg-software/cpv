@@ -22,6 +22,7 @@ public class EJGraph extends GenericJGraph
 //------------------------------------------------------------------------
     public EJGraph()
     {
+    	super(new DefaultGraphModel());
     	// create an empty Local Variables Vertex
     	// space is reserved for "<html></html>"
         VarsCell = InsertBlock(CurrentX, CurrentY, MyGraphCell.GENERIC, "             ", 

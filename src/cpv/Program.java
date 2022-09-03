@@ -56,7 +56,11 @@ public class Program
             dec.close();      // now the program is loaded
             SaveData();       // save it into memory
         }
-        catch(Exception e)
+        catch(MyException e)
+        {
+            JOptionPane.showMessageDialog(Application.frame, "Exception in Program(): " + e.getMessage());
+        }
+        catch(IOException e)
         {
             JOptionPane.showMessageDialog(Application.frame, "Exception in Program(): " + e.getMessage());
         }

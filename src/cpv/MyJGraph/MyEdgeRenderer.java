@@ -29,7 +29,8 @@ class MyEdgeRenderer extends EdgeRenderer
         //MyVertexView SrcView = (MyVertexView)view.getSource().getParentView();
         MyVertexView DestView = (MyVertexView)view.getTarget().getParentView();   // get destination view
 
-        String lab = ((JGraph)this.graph.get()).convertValueToString(view).toString();       // get edge label
+        String lab = view.toString();// correct?
+        //String lab = ((JGraph)this.graph.get()).convertValueToString(view).toString();       // get edge label
         Point2D P0 = view.getPoint(view.getPointCount() - 2);       // get two last points
         Point2D P1 = view.getPoint(view.getPointCount() - 1);
         Point PM;                                                 // middle points
@@ -84,7 +85,8 @@ class MyEdgeRenderer extends EdgeRenderer
         Path.moveTo(P0.getX(), P0.getY());
         Path.quadTo(PM.x, PM.y, P1.getX(), P1.getY());              // use curved route
 
-        view.beginShape = new Rectangle((Point)P0);                 // create arrow starting shape
+        Point p = new Point((int)P0.getX(), (int)P0.getY());
+        view.beginShape = new Rectangle(p);                 // create arrow starting shape
         view.endShape = createLineEnd(endSize, endDeco, PM, P1);    // create arrow ending
         view.lineShape = (Shape)Path.clone();
         Path.append(view.endShape, true);
