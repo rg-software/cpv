@@ -87,7 +87,7 @@ public class GlobalVarsFrame extends MyInternalFrame
         String[] s = TextArea.getText().split("\n");   // each line is vector element
         
         for (var line : s)							   // create vector
-            if(!line.equals(""))                       // from non-empty lines
+            if (!line.equals(""))                       // from non-empty lines
                 v.add(line);
         
         return v;

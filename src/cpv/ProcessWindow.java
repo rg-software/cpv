@@ -127,7 +127,7 @@ public class ProcessWindow extends MyInternalFrame
             {
                 public void mouseClicked(MouseEvent e)
                 {
-                    if(SwingUtilities.isRightMouseButton(e))             // show popup menu
+                    if (SwingUtilities.isRightMouseButton(e))             // show popup menu
                         PopupMenu.show(flowchart, e.getX(), e.getY());
                 }
             });
@@ -139,7 +139,7 @@ public class ProcessWindow extends MyInternalFrame
                 {
                     if (e.getKeyCode() == KeyEvent.VK_DELETE)           // delete selection
                         flowchart.DeleteSelection();
-                    else if(e.getKeyCode() == KeyEvent.VK_M && e.isControlDown())
+                    else if (e.getKeyCode() == KeyEvent.VK_M && e.isControlDown())
         				PopupMenu.show(flowchart, 0, 0);
                 }
 

@@ -1,1 +1,1 @@
-java.exe -jar cpv.jar
+java.exe -jar build/cpv.jar

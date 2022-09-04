@@ -28,11 +28,11 @@ public class Program
                 String s = dec.readLine();              // read window signature
                 f = null;
                 // create a specified window
-                if(s.equals("GVF"))                		// Global Variables Frame
+                if (s.equals("GVF"))                		// Global Variables Frame
                     f = new GlobalVarsFrame(dec);
-                else if(s.equals("PW"))				    // Process Window
+                else if (s.equals("PW"))				    // Process Window
                     f = new ProcessWindow(dec);
-                else if(s.equals("DW"))				    // Diagram Window
+                else if (s.equals("DW"))				    // Diagram Window
                     f = new DiagramWindow(dec);
                 else
                     throw new MyException("Unknown window type");
@@ -86,13 +86,13 @@ public class Program
 
             enc.println(flist.length);                    // number of frames
 
-            for(var f : flist)
+            for (var f : flist)
             {
-                if(f instanceof GlobalVarsFrame)   		// write window signature
+                if (f instanceof GlobalVarsFrame)   		// write window signature
                     enc.println("GVF");			  		// Global Variables Frame
-                else if(f instanceof ProcessWindow)
+                else if (f instanceof ProcessWindow)
                     enc.println("PW");                  // Process Window
-                else if(f instanceof DiagramWindow)
+                else if (f instanceof DiagramWindow)
                     enc.println("DW");		          	// Diagram Window
                 else
                     throw new MyException("Unknown window type");
@@ -128,7 +128,7 @@ public class Program
 //------------------------------------------------------------------------
     public void CloseAll()      // close windows
     {
-        for(var f : Application.frame.desktop.getAllFrames())
+        for (var f : Application.frame.desktop.getAllFrames())
             f.dispose();
     }
 //------------------------------------------------------------------------
@@ -148,7 +148,7 @@ public class Program
     public GlobalVarsFrame GetGVF()
     {
         for (var f : Application.frame.desktop.getAllFrames())
-            if(f instanceof GlobalVarsFrame)
+            if (f instanceof GlobalVarsFrame)
                 return (GlobalVarsFrame)f;
         return null;
     }
@@ -170,7 +170,7 @@ public class Program
                 vec.add("__process " + f.getTitle().substring(8)); // skip "Process " substring
                 vars = ((ProcessWindow)f).GetProcessGraph().GetVarsAsVector();
 
-                for(var v : vars)      // extract local variables
+                for (var v : vars)      // extract local variables
                     vec.add(Translator.getTranslator().TranslateVariable(v));
                 vec.add("__code");
 
@@ -178,7 +178,7 @@ public class Program
                 vec.addAll(((ProcessWindow)f).GetProcessGraph().GetCodeAsVector());
 
                 // endproc is added by end block; in case of no end block should add manually
-                if(!vec.get(vec.size() - 1).equals("__endproc"))
+                if (!vec.get(vec.size() - 1).equals("__endproc"))
                     vec.add("__endproc");
             }
 
