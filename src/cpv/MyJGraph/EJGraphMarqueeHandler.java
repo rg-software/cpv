@@ -18,7 +18,7 @@ public class EJGraphMarqueeHandler extends BasicMarqueeHandler
 //------------------------------------------------------------------------
     public boolean isForceMarqueeEvent(MouseEvent e)   // if cursor is over port or double-click occured,
     {                                                  // use our handler, otherwise use standard
-        if(graph.IsOverPort() || e.getClickCount() == 2)
+        if (graph.IsOverPort() || e.getClickCount() == 2)
             return true;
         return super.isForceMarqueeEvent(e);
     }

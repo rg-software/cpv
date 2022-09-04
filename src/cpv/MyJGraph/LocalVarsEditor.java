@@ -93,15 +93,15 @@ public class LocalVarsEditor extends BlockEditor
 //------------------------------------------------------------------------
     void TextArea_keyPressed(KeyEvent e)        // if ESC pressed, it is the same as Cancel
     {
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
             CancelButton_actionPerformed(null);
-        else if(e.getKeyCode() == KeyEvent.VK_M && e.isControlDown())
+        else if (e.getKeyCode() == KeyEvent.VK_M && e.isControlDown())
         	TextArea.ShowPopupMenu();
     }
- //------------------------------------------------------------------------
+//------------------------------------------------------------------------
     public boolean OKPressed()
     {
         return OKPressed;
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 }

@@ -14,69 +14,60 @@ import cpv.*;
 //------------------------------------------------------------------------
 public class GenericJGraph extends JGraph
 {
+//------------------------------------------------------------------------
 	static class MyCellViewFactory extends DefaultCellViewFactory
 	{
-	    protected VertexView createVertexView(Object v)//, CellMapper cm)   // provide a custom vertex view
+	    protected VertexView createVertexView(Object v)	// provide a custom vertex view
 	    {
-	        return new MyVertexView(v);//, this, cm);
+	        return new MyVertexView(v);
 	    }
-	    protected EdgeView createEdgeView(Object e)//, CellMapper cm)  // provide also custom edge view
-	    {                                                           // (straight / curved)
-	        return new MyEdgeView(e);//, this, cm);
+
+	    protected EdgeView createEdgeView(Object e)	// provide also custom edge view
+	    {                                           // (straight / curved)
+	        return new MyEdgeView(e);
 	    }
 	}
-
+//------------------------------------------------------------------------
 	static class MyLayoutCache extends GraphLayoutCache
 	{
 		public MyLayoutCache(GraphModel model)
 		{
 			super(model, new MyCellViewFactory());
 		}
-//			GraphLayoutCache view = new GraphLayoutCache(model,
-	//			new DefaultCellViewFactory());
-				//JGraph graph = new JGraph(model, view);
-				//DefaultGraphCell[] cells = new DefaultGraph
-
 	}
-	
-		
 //------------------------------------------------------------------------
     protected GenericJGraph(GraphModel model)
     {
         super(model, new MyLayoutCache(model)); // use default graph model
-        setEditable(false);                             // forbid editing
+        setEditable(false);                     // disable editing
         setAntiAliased(true);
-        //setScale(2);
-//        setPreferredSize(new Dimension(1500,1500));
     }
-	//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 //------------------------------------------------------------------------
     // generic InsertBlock routine; returns just inserted block
     protected MyGraphCell InsertBlock(int X, int Y, int type, String text, int width, int height, Color bcolor)
     {
         MyGraphCell vertex = new MyGraphCell(type, text);       // create new block
-    	var attributes = new HashMap<DefaultGraphCell, AttributeMap>();            	
+    	var nest = new HashMap<DefaultGraphCell, AttributeMap>();            	
  
         // create attributes
-        if(type == MyGraphCell.BRANCHING)      // if this block is branching block
+        if (type == MyGraphCell.BRANCHING)      // if this block is a branching block
         {
-        	//int PERCENT = GraphConstants.PERMILLE / 10;
-        	
-            var newmap = new AttributeMap();//GraphConstants.createMap();
-            GraphConstants.setOffset(newmap, new Point(GraphConstants.PERMILLE, GraphConstants.PERMILLE / 2));
+            var attr = new AttributeMap();
+            GraphConstants.setOffset(attr, new Point(GraphConstants.PERMILLE, GraphConstants.PERMILLE / 2));
             DefaultPort port = new DefaultPort("right");  // three ports will be available:
-            attributes.put(port, newmap);                 // "right", "left" and "up"
+            nest.put(port, attr);                 		  // "right", "left" and "up"
             vertex.add(port);
-            newmap = new AttributeMap();//GraphConstants.createMap();
-            GraphConstants.setOffset(newmap, new Point(0, GraphConstants.PERMILLE / 2));
+            
+            attr = new AttributeMap();
+            GraphConstants.setOffset(attr, new Point(0, GraphConstants.PERMILLE / 2));
             port = new DefaultPort("left");
-            attributes.put(port, newmap);
+            nest.put(port, attr);
             vertex.add(port);
-            newmap = new AttributeMap();//Constants.createMap();
-            GraphConstants.setOffset(newmap, new Point(GraphConstants.PERMILLE / 2, 0));
+            
+            attr = new AttributeMap();
+            GraphConstants.setOffset(attr, new Point(GraphConstants.PERMILLE / 2, 0));
             port = new DefaultPort("up");
-            attributes.put(port, newmap);
+            nest.put(port, attr);
             vertex.add(port);
         }
         else                                          // else we need central port only
@@ -85,14 +76,14 @@ public class GenericJGraph extends JGraph
         // apply attributes
         Point2D point = snap(new Point(X, Y));
         Dimension size = new Dimension(width, height);
-        var map = new AttributeMap();//GraphConstants.createMap();
-        GraphConstants.setBounds(map, new Rectangle(new Point((int)point.getX(), (int)point.getY()), size));
-        GraphConstants.setBorderColor(map, bcolor);
-        GraphConstants.setBackground(map, Configuration.JGRAPH_DEFAULT_BACKGROUND_COLOR);
-        GraphConstants.setOpaque(map, true);
-        attributes.put(vertex, map);
+        var attr = new AttributeMap();
+        GraphConstants.setBounds(attr, new Rectangle(new Point((int)point.getX(), (int)point.getY()), size));
+        GraphConstants.setBorderColor(attr, bcolor);
+        GraphConstants.setBackground(attr, Configuration.JGRAPH_DEFAULT_BACKGROUND_COLOR);
+        GraphConstants.setOpaque(attr, true);
+        nest.put(vertex, attr);
 
-        getModel().insert(new Object[]{vertex}, attributes, null, null, null);
+        getModel().insert(new Object[]{vertex}, nest, null, null, null);
         return vertex;
     }
 //------------------------------------------------------------------------
@@ -106,11 +97,11 @@ public class GenericJGraph extends JGraph
     {
         ConnectionSet cs = new ConnectionSet();         // standard JGraph way (refer to documentation)
         cs.connect(edge, source, target);
-        var map = new AttributeMap();
-        GraphConstants.setLineEnd(map, GraphConstants.ARROW_TECHNICAL);
-    	var attributes = new HashMap<DefaultGraphCell, AttributeMap>();            	
-        attributes.put(edge, map);
-        getModel().insert(new Object[]{edge}, attributes, cs, null, null);
+    	var nest = new HashMap<DefaultGraphCell, AttributeMap>();            	
+        var attr = new AttributeMap();
+        GraphConstants.setLineEnd(attr, GraphConstants.ARROW_TECHNICAL);
+        nest.put(edge, attr);
+        getModel().insert(new Object[]{edge}, nest, cs, null, null);
     }
 //------------------------------------------------------------------------
     // create an edge between source and target; label is supplied by user
@@ -125,43 +116,37 @@ public class GenericJGraph extends JGraph
     // create an edge between source and target; label is determined automatically ("single", "left" or "right")
     public void connect(Port source, Port target)
     {
-/*        if(source == target) // loop arrow
-        {
-        	connect(source, target, "loop");
-        	return;
-        }*/
-        
         MyGraphCell srcCell = (MyGraphCell)getModel().getParent(source);   // get source cell
 
         // get edges, attached to the source cell
         Object[] edges = (DefaultGraphModel.getEdges(getModel(), new Object[]{srcCell})).toArray();
         DefaultEdge straight = null, reverse = null;
 
-        for(int i = 0; i < edges.length; i++)    // trying to find existing edges between two given ports
+        for (var e : edges)    // trying to find existing edges between two given ports
         {
-            DefaultEdge edge = (DefaultEdge)edges[i];
+            DefaultEdge edge = (DefaultEdge)e;
             DefaultPort srcPort = (DefaultPort)getModel().getSource(edge);
             DefaultPort trgPort = (DefaultPort)getModel().getTarget(edge);
 
-            if(srcPort == source && trgPort == target)
+            if (srcPort == source && trgPort == target)
                 straight = edge;
-            if(srcPort == target && trgPort == source)
+            if (srcPort == target && trgPort == source)
                 reverse = edge;
         }
 
-        if(source == target) // loop edges are always allowed
+        if (source == target) // loop edges are always allowed
         {
         	connect(source, target, "single");
         	return;
         }
         
-        if(straight != null)   // connection is already exists; exit
+        if (straight != null)   // connection is already exists; exit
             return;                                   
 
-        if(straight == null && reverse == null)   // no connections detected - connecting
+        if (straight == null && reverse == null)   // no connections detected - connecting
             connect(source, target, "single");
 
-        if(straight == null && reverse != null)    // reverse connection exists:
+        if (straight == null && reverse != null)    // reverse connection exists:
         {
             getModel().remove(new Object[]{reverse});   // removing reverse edge
             connect(source, target, "left");            // create two curved edges
@@ -178,10 +163,10 @@ public class GenericJGraph extends JGraph
     {
         var p = cell.getChildren().listIterator();
 
-        while(p.hasNext())
+        while (p.hasNext())
         {
             DefaultPort port = (DefaultPort)p.next();
-            if(convertValueToString(port).equals(name))
+            if (convertValueToString(port).equals(name))
                 return port;
         }
 
@@ -197,7 +182,7 @@ public class GenericJGraph extends JGraph
         var ports = new Hashtable<Integer, Port>();
 
         int idx = 0;
-        for(int i = 0; i < cells; i++)                            // for each cell read values:
+        for (int i = 0; i < cells; i++)                            // for each cell, read values:
         {
             Color c = new Color(Integer.parseInt(dec.readLine())); // vertex color
             int tag = Integer.parseInt(dec.readLine());            // vertex tag
@@ -213,22 +198,22 @@ public class GenericJGraph extends JGraph
             MyGraphCell cell = InsertBlock(r.x, r.y, type, label, r.width, r.height, c);
             cell.setTag(tag);    // write tag
 
-            for(int j = 0; j < getModel().getChildCount(cell); j++)        // memorize ports
+            for (int j = 0; j < getModel().getChildCount(cell); j++)        // memorize ports
             {
-                DefaultPort p = (DefaultPort)getModel().getChild(cell, j); // get j-th port
+                DefaultPort p = (DefaultPort)getModel().getChild(cell, j);  // get the j-th port
                 ports.put(Integer.valueOf(idx++), p);
             }
         }
 
         int edges = Integer.parseInt(dec.readLine());            // read number of edges
 
-        for(int i = 0; i < edges; i++)                         // for each edge read corresponding ports
+        for (int i = 0; i < edges; i++)                          // for each edge read corresponding ports
         {
             DefaultPort src = (DefaultPort)ports.get(Integer.valueOf(dec.readLine()));
             DefaultPort dest = (DefaultPort)ports.get(Integer.valueOf(dec.readLine()));
 
             connect(src, dest);
-	// TODO: somehow load and add middle points
+            // TODO: load and add middle points (they are not saved now)
         }
     }
 //------------------------------------------------------------------------
@@ -238,7 +223,7 @@ public class GenericJGraph extends JGraph
         Object[] objects = getDescendants(getRoots());    // get all graph cells
         var ports = new Hashtable<Port, Integer>();
 
-        // NOTE(mm): order() is removed, is it important?
+        // NOTE: order() is removed, is it important?
         // objects = getGraphLayoutCache().order(objects);   // reorder them
         
         var viewAttributes = GraphConstants.createAttributes(objects, getGraphLayoutCache());  // get attributes
@@ -246,28 +231,28 @@ public class GenericJGraph extends JGraph
         int cells = 0;      // number of vertices
         int edges = 0;      // number of edges
 
-        for(int i = 0; i < objects.length; i++)           // calculate these values
-            if(objects[i] instanceof MyGraphCell)
+        for (var o : objects)           // calculate these values
+            if (o instanceof MyGraphCell)
                 cells++;
-        else if(objects[i] instanceof DefaultEdge)
+        else if (o instanceof DefaultEdge)
             edges++;
 
-        enc.println(cells);                           // write number of vertices
+        enc.println(cells);                           // write the number of vertices
 
         int idx = 0;
-        for(int i = 0; i < objects.length; i++)
-            if(objects[i] instanceof MyGraphCell)     // for each vertex
+        for (var o : objects)
+            if (o instanceof MyGraphCell)     // for each vertex
             {
-            	var mycell= (MyGraphCell)objects[i];
-                var attrs = (AttributeMap)viewAttributes.get(objects[i]);    // get parameters
+            	var mycell = (MyGraphCell)o;
+                var attrs = (AttributeMap)viewAttributes.get(o);    // get parameters
 
-                Rectangle2D r = GraphConstants.getBounds(attrs);              // bounding rectangle
-                String lab = convertValueToString(objects[i]).toString();   // label
+                Rectangle2D r = GraphConstants.getBounds(attrs);    // bounding rectangle
+                String lab = convertValueToString(o).toString();    // label
 
-                for(int j = 0; j < getModel().getChildCount(objects[i]); j++)
+                for (int j = 0; j < getModel().getChildCount(o); j++)
                 {
-                    DefaultPort p = (DefaultPort)getModel().getChild(objects[i], j); 	// get j-th port
-                    ports.put(p, Integer.valueOf(idx++));                  				// memorize ports
+                    DefaultPort p = (DefaultPort)getModel().getChild(o, j); 	// get j-th port
+                    ports.put(p, Integer.valueOf(idx++));                  		// memorize ports
                 }
 
                 enc.println(GraphConstants.getBorderColor(mycell.getAttributes()).getRGB());
@@ -282,21 +267,21 @@ public class GenericJGraph extends JGraph
 
         enc.println(edges);           // write number of edges
 
-        for(int i = 0; i < objects.length; i++)
-            if(objects[i] instanceof DefaultEdge)      // for each edge
+        for (var o : objects)
+            if (o instanceof DefaultEdge)      // for each edge
             {
                 // write source port, target port, edge
-                DefaultPort src = (DefaultPort)((DefaultEdge)objects[i]).getSource();
-                DefaultPort dest = (DefaultPort)((DefaultEdge)objects[i]).getTarget();
+                DefaultPort src = (DefaultPort)((DefaultEdge)o).getSource();
+                DefaultPort dest = (DefaultPort)((DefaultEdge)o).getTarget();
 
                 enc.println((Integer)ports.get(src));
                 enc.println((Integer)ports.get(dest));
 
-// commented: saving middle points of the edge
-/*                EdgeView ev = (EdgeView)getGraphLayoutCache().getMapping(objects[i], true);
+                // TODO: save middle points of the edge
+                /* EdgeView ev = (EdgeView)getGraphLayoutCache().getMapping(objects[i], true);
 
                 enc.println(ev.getPointCount());
-                for(int j = 0; j < ev.getPointCount(); j++)
+                for (int j = 0; j < ev.getPointCount(); j++)
                 {
                     enc.println(ev.getPoint(j).x);
                     enc.println(ev.getPoint(j).y);

@@ -2,7 +2,6 @@ package cpv.MyJGraph;
 
 import java.awt.*;
 import java.awt.geom.*;
-import org.jgraph.*;
 import org.jgraph.graph.*;
 
 //------------------------------------------------------------------------
@@ -14,10 +13,9 @@ public class MyVertexView extends VertexView
     static EllipseRenderer BeginEndRenderer = new EllipseRenderer();  // two custom renderers
     static DiamondRenderer BranchingRenderer = new DiamondRenderer();
 //------------------------------------------------------------------------
-    public MyVertexView(Object v)//;//, JGraph p1, CellMapper cm)           // standard constructor
+    public MyVertexView(Object v)
     {
         super(v);
-        //, p1, cm);
         Vertex = (MyGraphCell)v;
     }
 //------------------------------------------------------------------------
@@ -28,7 +26,7 @@ public class MyVertexView extends VertexView
 //------------------------------------------------------------------------
     public CellViewRenderer getRenderer()             // standard VertexView interface function
     {
-        switch(Vertex.getType())
+        switch (Vertex.getType())
         {
             case MyGraphCell.GENERIC: return super.getRenderer();     // default rectangular renderer
             case MyGraphCell.BRANCHING: return BranchingRenderer;
@@ -39,7 +37,7 @@ public class MyVertexView extends VertexView
     }
 //------------------------------------------------------------------------
     private Point2D gppBEGIN_END(Point2D source, Point2D p)   // getPerimeterPoint() taken from JGraphPad
-    {                                                   // used for elliptic nodes
+    {                                                   	  // used for elliptic nodes
         Rectangle2D r = getBounds();
 
         double x = r.getX();
@@ -101,15 +99,14 @@ public class MyVertexView extends VertexView
         return new Point((int)xout, (int)yout);
     }
 //------------------------------------------------------------------------
-    public Point2D getPerimeterPoint(EdgeView edge, Point2D source, Point2D p)
-    //public Point getPerimeterPoint(EdgeView e, Point source, Point p)     // returns a point that is on a border of a node
-    {                                                         // between two given points (inside and outside)
-    	switch(Vertex.getType())	// TODO(mm): update deprecated getPerimeterPoint()
+    public Point2D getPerimeterPoint(EdgeView edge, Point2D source, Point2D p) // returns a point on a border of a node
+    {                                                         				   // between two given points (inside and outside)
+    	switch (Vertex.getType())
         {
             case MyGraphCell.GENERIC:   var p2d = super.getPerimeterPoint(null, source, p);
-            							return new Point((int)p2d.getX(), (int)p2d.getY());  // use standard getPerimeterPoint()
-            case MyGraphCell.BRANCHING: return source;                              // just a source point in case of diamond node
-            case MyGraphCell.BEGIN_END: return gppBEGIN_END(source, p);             // use getPerimeterPoint() for elliptic node
+            							return new Point((int)p2d.getX(), (int)p2d.getY());
+            case MyGraphCell.BRANCHING: return source;                              // just a source point in case of a diamond node
+            case MyGraphCell.BEGIN_END: return gppBEGIN_END(source, p);
         }
 
         return new Point();

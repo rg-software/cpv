@@ -3,7 +3,6 @@ package cpv.MyJGraph;
 import java.awt.event.MouseEvent;
 import org.jgraph.graph.EdgeView;
 import org.jgraph.graph.*;
-import org.jgraph.*;
 
 //------------------------------------------------------------------------
 // custom edge view (refer to JGraph documentation for details)
@@ -11,12 +10,10 @@ import org.jgraph.*;
 public class MyEdgeView extends EdgeView
 {
     static MyEdgeRenderer renderer = new MyEdgeRenderer();
-
 //------------------------------------------------------------------------
-    public MyEdgeView(Object cell)//, JGraph graph, CellMapper mapper)     // standard MyEdgeView functions
+    public MyEdgeView(Object cell)
     {
         super(cell);
-        //, graph, mapper);
     }
 //------------------------------------------------------------------------
     public CellViewRenderer getRenderer()

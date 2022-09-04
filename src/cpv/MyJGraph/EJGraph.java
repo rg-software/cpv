@@ -35,22 +35,26 @@ public class EJGraph extends GenericJGraph
     public void LoadFromFile(BufferedReader dec) throws java.io.IOException
     {
         super.LoadFromFile(dec);
-        Object[] roots = getRoots();       // get all cells of the graph
 
-        for(int i = 0; i < roots.length; i++)       // finding Vars Cell Vertex
-            if(roots[i] instanceof MyGraphCell && ((MyGraphCell)roots[i]).getTag() == MyGraphCell.VARS_CELL)
-            	VarsCell = (MyGraphCell)roots[i];    // validate VarsCell reference
+        for (Object r : getRoots()) // finding Vars Cell Vertex
+            if (r instanceof MyGraphCell && ((MyGraphCell)r).getTag() == MyGraphCell.VARS_CELL)
+            	VarsCell = (MyGraphCell)r;    // validate VarsCell reference
     }
 //------------------------------------------------------------------------
     public void EditVarsCell()       // convenience function: shows Local Variables Editor box
     {
-        EditCell(VarsCell);
+        editCell(VarsCell);
     }
 //------------------------------------------------------------------------
-    private void EditCell(MyGraphCell cell)     // shows an editor box for a given cell
+    public MyGraphCell GetVarsCell()
+    {
+    	return VarsCell;
+    }
+//------------------------------------------------------------------------
+    private void editCell(MyGraphCell cell)     // shows an editor box for a given cell
     {
         // if the given cell is not END (END block edition is forbidden), use cell editor
-        if(cell.getType() != MyGraphCell.BEGIN_END)
+        if (cell.getType() != MyGraphCell.BEGIN_END)
         {
             //  if the given cell is the VarsCell use Local Variables Editor
         	BlockEditor editor = cell == VarsCell ? 
@@ -60,7 +64,7 @@ public class EJGraph extends GenericJGraph
             editor.setLocationRelativeTo(this);
             editor.setVisible(true);
         
-        	if(editor.OKPressed())             // if edition succeeded
+        	if (editor.OKPressed())             // if edition succeeded
         	{
             	var nest = new HashMap<DefaultGraphCell, AttributeMap>();            	
             	var attr = new AttributeMap();
@@ -73,16 +77,16 @@ public class EJGraph extends GenericJGraph
 //------------------------------------------------------------------------
     public void MousePressed(MouseEvent e)         // mouse handler
     {
-        if(SwingUtilities.isLeftMouseButton(e))
+        if (SwingUtilities.isLeftMouseButton(e))
         {
-            if(e.getClickCount() == 2) // on left-button double-click show cell editor box
+            if (e.getClickCount() == 2) // on left-button double-click show cell editor box
             {
                 Object cell = getFirstCellForLocation(e.getX(), e.getY());
                 if (cell instanceof MyGraphCell)    // edit cell contents
-                    EditCell((MyGraphCell)cell);
+                    editCell((MyGraphCell)cell);
                 e.consume();
             }
-            else if(e.getClickCount() == 1)  // on single click get starting port
+            else if (e.getClickCount() == 1)  // on single click get starting port
             {
                 Point2D p = fromScreen(new Point(e.getPoint()));
                 PortView pv = getPortViewAt(p.getX(), p.getY());        // get portview under mouse pointer
@@ -91,7 +95,7 @@ public class EJGraph extends GenericJGraph
                 // StartPort is used for arrow creation; see also MouseDragged() and MouseReleased()
                 
                 StartPort = (pv != null && getModel().getParent((Port)pv.getCell()) != VarsCell) ? pv : null;
-                if(StartPort != null)
+                if (StartPort != null)
                     e.consume();
             }
         }
@@ -99,7 +103,7 @@ public class EJGraph extends GenericJGraph
 //------------------------------------------------------------------------
     public void MouseReleased(MouseEvent e)  // on mouse release possibly create an arrow
     {
-        if(SwingUtilities.isLeftMouseButton(e))
+        if (SwingUtilities.isLeftMouseButton(e))
         {
             Point2D tmp = fromScreen(new Point(e.getPoint()));
             PortView pv = getPortViewAt(tmp.getX(), tmp.getY());
@@ -107,14 +111,14 @@ public class EJGraph extends GenericJGraph
             // get an EndPort - the port of the destination cell
             PortView EndPort = (pv != null && getModel().getParent((Port)pv.getCell()) != VarsCell) ? pv : null;
 
-            if(StartPort != null && EndPort != null)  // if both ports are valid
+            if (StartPort != null && EndPort != null)  // if both ports are valid
             {
                 // get corresponding vertices
                 Port p1 = (Port)StartPort.getCell(), p2 = (Port)EndPort.getCell();
 
                 // transitions within the same vertex are allowed now (we only care that the ports are different)
                 // to ensure different port vertices, check (getModel().getParent(p1) != getModel().getParent(p2))
-                if(p1 != p2)
+                if (p1 != p2)
                     connect(p1, p2);
             }
 
@@ -130,18 +134,18 @@ public class EJGraph extends GenericJGraph
         CurrentX = e.getX();          // get current coordinates
         CurrentY = e.getY();
 
-        if(pv != null)                // if the port is valid
+        if (pv != null)                // if the port is valid
         {
             Object cell = getModel().getParent((Port)pv.getCell());   // get a parental cell
 
-            if(cell instanceof MyGraphCell && cell != VarsCell)       // if it is not VarsCell
+            if (cell instanceof MyGraphCell && cell != VarsCell)       // if it is not VarsCell
             {
                 IsOverPort = true;                                    // now we are "over port"
                 setCursor(new Cursor(Cursor.HAND_CURSOR));            // change current cursor
                 e.consume();
             }
         }
-        else if(IsOverPort)   // else if we WERE "over port"
+        else if (IsOverPort)   // else if we WERE "over port"
         {
             IsOverPort = false;
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR)); // change cursor to default
@@ -180,22 +184,22 @@ public class EJGraph extends GenericJGraph
 //------------------------------------------------------------------------
     public void DeleteSelection()       // delete all selected cells and attached arrows
     {                                	// known issue: when deleting curved arrow, should straighten remaining one
-        if(!isSelectionEmpty())         // if some cells are selected
+        if (!isSelectionEmpty())        // if some cells are selected
         {
             Object[] cells = getSelectionCells();     // get them
             cells = getDescendants(cells);            // get also their descendants
 
             var v = new Vector<Object>();                  // insert all cells into vector (except VarsCell)
-            for(int i = 0; i < cells.length; i++)
-                if(cells[i] != VarsCell)
-                    v.add(cells[i]);
+            
+            for (var c : cells)
+                if (c != VarsCell)
+                    v.add(c);
 
-            int N = v.size();
-            for(int i = 0; i < N; i++)
-                if(v.get(i) instanceof DefaultPort)
+            for (var p : v)
+                if (p instanceof DefaultPort)
                 {
-                    var e = ((DefaultPort)v.get(i)).edges();    // add also attached edges
-                    while(e.hasNext())
+                    var e = ((DefaultPort)p).edges();    // add also attached edges
+                    while (e.hasNext())
                         v.add(e.next());
                 }
 
@@ -208,20 +212,19 @@ public class EJGraph extends GenericJGraph
     	Object[] cells = getSelectionCells();
 
         // if the operation is legal
-        if(cells.length == 1 && cells[0] instanceof MyGraphCell && cells[0] != VarsCell)
-            MarkAsStarting(cells[0]);
+        if (cells.length == 1 && cells[0] instanceof MyGraphCell && cells[0] != VarsCell)
+            markAsStarting(cells[0]);
     }
 //------------------------------------------------------------------------
-    private void MarkAsStarting(Object cell)  // mark the given cell as starting
+    private void markAsStarting(Object cell)  // mark the given cell as starting
     {
     	var nest = new HashMap<DefaultGraphCell, AttributeMap>();            	
     	var attr = new AttributeMap();
         GraphConstants.setBorderColor(attr, Configuration.JGRAPH_DEFAULT_BORDER_COLOR);
 
-        Object[] roots = getRoots();                 // get all cells in the graph
-        for(int i = 0; i < roots.length; i++)
-            if(roots[i] instanceof MyGraphCell)
-                nest.put((MyGraphCell)roots[i], attr);         // mark all cells as NOT starting
+        for (var r : getRoots())						// get all cells in the graph
+            if (r instanceof MyGraphCell)
+                nest.put((MyGraphCell)r, attr);         // mark all cells as NOT starting
 
         getModel().edit(nest, null, null, null);  // apply changes
 
@@ -229,161 +232,29 @@ public class EJGraph extends GenericJGraph
         attr = new AttributeMap();
         GraphConstants.setBorderColor(attr, Configuration.EJGRAPH_SELECTED_BORDER_COLOR);
         nest.put((MyGraphCell)cell, attr);
-        if(cell != VarsCell)                          // mark selected cell as starting
+        
+        if (cell != VarsCell)                          // mark selected cell as starting
             getModel().edit(nest, null, null, null);
     }
 //------------------------------------------------------------------------
-    public MyGraphCell AddBlock(int type, String text)   // for convenience: add a block of a given type with a given label
+    public MyGraphCell AddBlock(int type, String text)   // add a block of the given type with the given label
     {
         MyGraphCell c = InsertBlock(CurrentX, CurrentY, type, text, 
         		                    Configuration.EJGRAPH_DEFAULT_CELL_WIDTH, Configuration.EJGRAPH_DEFAULT_CELL_HEIGHT);
-        if(type != MyGraphCell.BEGIN_END)   // edit any inserted block (except END)
-            EditCell(c);
+        if (type != MyGraphCell.BEGIN_END)   // edit any inserted block (except END)
+            editCell(c);
+        
         return c;
     }
 //------------------------------------------------------------------------
-    public Vector<String> GetVarsAsVector()      // get variables (as vector) from local variables frame
+    public Vector<String> GetVarsAsVector()      // get variables (as a vector) from the local variables frame
     {
-        var v = new Vector<String>();
-        String CellText = convertValueToString(VarsCell);    // text of the cell
-
-        // get the substring between <html>...</html>
-        String[] s = CellText.substring(6, CellText.length() - 7).split("<br>");
-
-        if(!s[0].equals(""))      // if at least one variable available, fill vector
-            for(int i = 0; i < s.length; i++)
-                v.add(s[i]);
-
-        return v;
+    	return new EJGraphCodeVector(this).GetVarsAsVector();
     }
 //------------------------------------------------------------------------
-    // get destination cell for the given source port (pointed by an arrow)
-    private MyGraphCell GetDestination(DefaultPort port) throws SyntaxErrorException
+    public Vector<String> GetCodeAsVector() throws SyntaxErrorException // get the IL program as a vector
     {
-        var e = port.edges();        // get all outgoing edges of the port
-        MyGraphCell result = null;
-        int OutgoingEdges = 0;
-
-        while(e.hasNext())
-        {
-            DefaultEdge edge = (DefaultEdge)e.next();
-
-            if(edge.getTarget() != port) // outgoing edge found
-            {
-            	result = (MyGraphCell)getModel().getParent(edge.getTarget());
-            	OutgoingEdges++;
-            }
-        }
-
-        if(OutgoingEdges != 1) // every port can have only one outgoing edge; raise an exception otherwise
-            throw new SyntaxErrorException("Block " + convertValueToString((MyGraphCell)getModel().getParent(port)) + 
-            		                       " has an incorrect number of outgoing edges");
-
-        return result;
-    }
-//------------------------------------------------------------------------
-    // move starting state to the first position of cells array
-    private void SetStartingStateFirst(Vector<MyGraphCell> cells) throws SyntaxErrorException
-    {
-        int counter = 0, index = -1;
-
-        for(int i = 0; i < cells.size(); i++)  // search for starting state
-            if(GraphConstants.getBorderColor(cells.get(i).getAttributes()).equals(Configuration.EJGRAPH_SELECTED_BORDER_COLOR))
-            {
-                if(++counter > 1)
-                    throw new SyntaxErrorException("Multiple starting states found");
-                index = i;
-            }
-
-        if(counter == 0)
-            throw new SyntaxErrorException("No starting states found");
-
-        MyGraphCell c = cells.get(index);  // make starting state first cell in array
-        cells.remove(index);
-        cells.add(0, c);
-    }
-//------------------------------------------------------------------------
-    private void SetFinalStateLast(Vector<MyGraphCell> cells) throws SyntaxErrorException
-    {
-        int counter = 0, index = -1;
-
-        for(int i = 0; i < cells.size(); i++)  // searching final state
-            if(cells.get(i).getType() == MyGraphCell.BEGIN_END)
-            {
-                if(++counter > 1)
-                	throw new SyntaxErrorException("Multiple final states found");
-
-                index = i;
-            }
-
-        if(counter == 1)
-        {
-        	MyGraphCell c = cells.get(index);    // make final state last cell in array
-        	cells.remove(index);
-        	cells.add(c);
-        }
-    }
-//------------------------------------------------------------------------
-    // get IL program as vector
-    public Vector<String> GetCodeAsVector() throws SyntaxErrorException
-    {
-        var cells = new Vector<MyGraphCell>(); // graph cells
-        var lines = new Vector<String>();      // resulting lines
-
-        for(int i = 0; i < getModel().getRootCount(); i++)  // put all cells into array
-        {
-            Object c = getModel().getRootAt(i);
-            if(c instanceof MyGraphCell && c != VarsCell)   // except VarsCell, naturally
-                cells.add((MyGraphCell)c);
-        }
-
-        SetStartingStateFirst(cells);   // rearrange important states
-        SetFinalStateLast(cells);
-
-    	for(int i = 0; i < cells.size(); i++)
-        {
-            MyGraphCell c = cells.get(i);
-
-            if(c.getType() == MyGraphCell.BEGIN_END)     // if some cell is END, add "__endproc"
-                lines.add("__endproc");
-            else							 // else get its IL value
-                lines.add(Translator.getTranslator().TranslateConstruction(convertValueToString(c)));
-        }
-
-        for(int i = 0; i < cells.size(); i++)       	// for each cell
-        {
-            MyGraphCell cell = cells.get(i);   			// analyse it
-
-            if(cell.getType() == MyGraphCell.GENERIC) 	// ordinary block, only ONE goto
-            {
-                int index = cells.indexOf(GetDestination(GetPortByName(cell, "central")));  // get destination cell of the central port
-
-                if(index == -1)
-                	throw new SyntaxErrorException("Incorrect arrow target (cell: " + cell.toString() + ")");
-
-                lines.set(i, lines.get(i) + " goto " + index);
-            }
-            else if(cell.getType() == MyGraphCell.BRANCHING)  // branching: two GOTOs
-            {
-                int no_idx = cells.indexOf(GetDestination(GetPortByName(cell, "left")));  // get two destination cells
-                int yes_idx = cells.indexOf(GetDestination(GetPortByName(cell, "right")));
-
-                if(no_idx == -1 || yes_idx == -1)
-                	throw new SyntaxErrorException("Incorrect arrow target (cell: " + cell.toString() + ")");
-
-                lines.set(i, lines.get(i) + " goto " + yes_idx + " else " + no_idx);
-            }
-            else if(cell.getType() == MyGraphCell.BEGIN_END)
-            	; // do nothing
-            else
-            	throw new SyntaxErrorException("Unknown block type");
-        }
-
-        // add onscreen text (remark) to each line (syntax: IL_string//onscreen_text)
-        for(int i = 0; i < cells.size(); i++)
-            lines.set(i, lines.get(i) + "//" + convertValueToString(cells.get(i)));
-
-        return lines;
+    	return new EJGraphCodeVector(this).GetCodeAsVector();
     }
 //------------------------------------------------------------------------
     public boolean IsOverPort()                // is the mouse pointer over port or not
@@ -392,5 +263,3 @@ public class EJGraph extends GenericJGraph
     }
 //------------------------------------------------------------------------
 }
-
-

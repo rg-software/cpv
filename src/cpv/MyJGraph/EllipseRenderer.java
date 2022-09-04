@@ -31,7 +31,7 @@ public class EllipseRenderer extends VertexRenderer
             // IMPORTANT: in case of END block, output text in the centre of the block
             // otherwise use top-left alignment
             
-            if(getText().equals("end"))
+            if (getText().equals("end"))
                 super.paint(g);                // alignment: centre
             else                               // alignment: top-left
             {
