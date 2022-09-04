@@ -38,7 +38,7 @@ public class MyVertexView extends VertexView
         return null;
     }
 //------------------------------------------------------------------------
-    private Point gppBEGIN_END(Point source, Point p)   // getPerimeterPoint() taken from JGraphPad
+    private Point2D gppBEGIN_END(Point2D source, Point2D p)   // getPerimeterPoint() taken from JGraphPad
     {                                                   // used for elliptic nodes
         Rectangle2D r = getBounds();
 
@@ -52,8 +52,8 @@ public class MyVertexView extends VertexView
         double y0 = y + b;
 
         // x1, y1 - point
-        double x1 = p.x;
-        double y1 = p.y;
+        double x1 = p.getX();
+        double y1 = p.getY();
 
         // calculate straight line equation through point and ellipse center
         // y = d * x + h
@@ -101,8 +101,8 @@ public class MyVertexView extends VertexView
         return new Point((int)xout, (int)yout);
     }
 //------------------------------------------------------------------------
-    // TODO(mm): fix ellipse and branching!
-    public Point getPerimeterPoint(EdgeView e, Point source, Point p)     // returns a point that is on a border of a node
+    public Point2D getPerimeterPoint(EdgeView edge, Point2D source, Point2D p)
+    //public Point getPerimeterPoint(EdgeView e, Point source, Point p)     // returns a point that is on a border of a node
     {                                                         // between two given points (inside and outside)
     	switch(Vertex.getType())	// TODO(mm): update deprecated getPerimeterPoint()
         {

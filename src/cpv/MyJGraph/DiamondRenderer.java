@@ -13,7 +13,7 @@ public class DiamondRenderer extends VertexRenderer
     public void paint(Graphics g)       // repaint vertex
     {
         int b = borderWidth;
-        Graphics2D g2 = (Graphics2D)g;
+        Graphics2D g2d = (Graphics2D)g;
         Dimension d = getSize();
         boolean is_selected = selected;
 
@@ -42,7 +42,7 @@ public class DiamondRenderer extends VertexRenderer
         if (bordercolor != null)     // draw a border
         {
             g.setColor(bordercolor);
-            g2.setStroke(new BasicStroke(b));
+            g2d.setStroke(new BasicStroke(b));
             g.drawLine(b - 1, (d.height - 1) / 2, (d.width - 1) / 2, b - 1);
             g.drawLine((d.width - 1) / 2, b - 1, d.width - b, (d.height - 1) / 2);
             g.drawLine(d.width - b, (d.height - 1) / 2, (d.width - 1) / 2, d.height - b);
@@ -50,14 +50,14 @@ public class DiamondRenderer extends VertexRenderer
 
             // print "yes" and "no" labels
             FontMetrics fm = g.getFontMetrics();
-            int yes_width = fm.charWidth('y') + fm.charWidth('e') + fm.charWidth('s');
+            int yes_width = fm.charsWidth(new char[] {'y', 'e', 's'}, 0, 3);
             g.drawString("no", b - 1, (d.height - 1) / 2 - fm.getHeight());
             g.drawString("yes", d.width - b - yes_width, (d.height - 1) / 2 - fm.getHeight());
         }
 
         if (selected)       // draw selection
         {
-            g2.setStroke(GraphConstants.SELECTION_STROKE);
+            g2d.setStroke(GraphConstants.SELECTION_STROKE);
             g.setColor(highlightColor);
             g.drawLine(b - 1, (d.height - 1) / 2, (d.width - 1) / 2, b - 1);
             g.drawLine((d.width - 1) / 2, b - 1, d.width - b, (d.height - 1) / 2);

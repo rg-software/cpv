@@ -84,8 +84,8 @@ public class EJGraph extends GenericJGraph
             }
             else if(e.getClickCount() == 1)  // on single click get starting port
             {
-                Point2D tmp = fromScreen(new Point(e.getPoint()));
-                PortView pv = getPortViewAt(tmp.getX(), tmp.getY());        // get portview under mouse pointer
+                Point2D p = fromScreen(new Point(e.getPoint()));
+                PortView pv = getPortViewAt(p.getX(), p.getY());        // get portview under mouse pointer
                 
                 // if there IS a port under mouse pointer and it is NOT VarsCell's port, make a reference to this port
                 // StartPort is used for arrow creation; see also MouseDragged() and MouseReleased()
@@ -112,11 +112,8 @@ public class EJGraph extends GenericJGraph
                 // get corresponding vertices
                 Port p1 = (Port)StartPort.getCell(), p2 = (Port)EndPort.getCell();
 
-                // connect if ports belong to different cells
-/*                if(getModel().getParent(p1) != getModel().getParent(p2))
-                    connect(p1, p2);*/
-
-                // now it is ALLOWED
+                // transitions within the same vertex are allowed now (we only care that the ports are different)
+                // to ensure different port vertices, check (getModel().getParent(p1) != getModel().getParent(p2))
                 if(p1 != p2)
                     connect(p1, p2);
             }
@@ -128,7 +125,7 @@ public class EJGraph extends GenericJGraph
     public void MouseMoved(MouseEvent e)
     {
         Point2D tmp = fromScreen(new Point(e.getPoint()));
-        PortView pv = getPortViewAt(tmp.getX(), tmp.getY());             // get a port under mouse pointer
+        PortView pv = getPortViewAt(tmp.getX(), tmp.getY());             // get a port under the mouse pointer
 
         CurrentX = e.getX();          // get current coordinates
         CurrentY = e.getY();
@@ -181,7 +178,7 @@ public class EJGraph extends GenericJGraph
         }
     }
 //------------------------------------------------------------------------
-    public void DeleteSelection()        // delete all selected cells and attached arrows
+    public void DeleteSelection()       // delete all selected cells and attached arrows
     {                                	// known issue: when deleting curved arrow, should straighten remaining one
         if(!isSelectionEmpty())         // if some cells are selected
         {
@@ -206,7 +203,7 @@ public class EJGraph extends GenericJGraph
         }
     }
 //------------------------------------------------------------------------
-    public void MarkAsStarting()	// mark selected cell as starting
+    public void MarkAsStarting()	// mark the selected cell as starting
     {
     	Object[] cells = getSelectionCells();
 
@@ -215,7 +212,7 @@ public class EJGraph extends GenericJGraph
             MarkAsStarting(cells[0]);
     }
 //------------------------------------------------------------------------
-    public void MarkAsStarting(Object cell)  // mark the given cell as starting
+    private void MarkAsStarting(Object cell)  // mark the given cell as starting
     {
     	var nest = new HashMap<DefaultGraphCell, AttributeMap>();            	
     	var attr = new AttributeMap();
@@ -280,7 +277,7 @@ public class EJGraph extends GenericJGraph
 
         if(OutgoingEdges != 1) // every port can have only one outgoing edge; raise an exception otherwise
             throw new SyntaxErrorException("Block " + convertValueToString((MyGraphCell)getModel().getParent(port)) + 
-            		                       " has incorrect number of outgoing edges");
+            		                       " has an incorrect number of outgoing edges");
 
         return result;
     }
