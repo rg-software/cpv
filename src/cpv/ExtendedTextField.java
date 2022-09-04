@@ -4,9 +4,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
-////////////////////////////////////////////////////////////////////////////////
 // JTextField with fast templates implementation
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 public class ExtendedTextField extends JTextField
 {
     private JPopupMenu jPopupMenu1 = new JPopupMenu();
@@ -18,7 +17,7 @@ public class ExtendedTextField extends JTextField
     private JMenuItem SignalItem = new JMenuItem("signal(S);");
     private JMenuItem StandardIFItem = new JMenuItem("x ifop y");
 
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     public ExtendedTextField()
     {
         super();
@@ -26,7 +25,7 @@ public class ExtendedTextField extends JTextField
         {
             jbInit();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -37,18 +36,18 @@ public class ExtendedTextField extends JTextField
         {
             public void mouseClicked(MouseEvent e)
             {
-                if(SwingUtilities.isRightMouseButton(e))
+                if (SwingUtilities.isRightMouseButton(e))
                     jPopupMenu1.show(textarea, e.getX(), e.getY());
             }
         });
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(KeyEvent e) {
-            	if(e.getKeyCode() == KeyEvent.VK_M && e.isControlDown())
+            	if (e.getKeyCode() == KeyEvent.VK_M && e.isControlDown())
         			jPopupMenu1.show(textarea, 0, 0);
             }
         });
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     private void jbInit() throws Exception      // initialization routine
     {
         CommentItem.setMnemonic('/');
@@ -102,4 +101,5 @@ public class ExtendedTextField extends JTextField
         jPopupMenu1.add(SignalItem);
         jPopupMenu1.add(StandardIFItem);
     }
+//------------------------------------------------------------------------
 }

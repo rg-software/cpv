@@ -1,19 +1,13 @@
 package cpv;
 
-import org.jgraph.JGraph;
 import java.awt.*;
 import java.awt.event.*;
-import com.jgraph.*;
 import javax.swing.*;
 import cpv.MyJGraph.*;
 import java.io.*;
-import java.beans.*;
-import java.util.*;
-import org.jgraph.graph.*;
 
-////////////////////////////////////////////////////////////////////////////////
-// window for the flowchart
-////////////////////////////////////////////////////////////////////////////////
+// a window for the flowchart
+//------------------------------------------------------------------------
 public class ProcessWindow extends MyInternalFrame
 {
     private EJGraph flowchart = new EJGraph();                 // window controls
@@ -25,15 +19,13 @@ public class ProcessWindow extends MyInternalFrame
     private JMenuItem MarkItem = new JMenuItem();
     private JMenuItem SemaphoreOpItem = new JMenuItem();
     private JMenuItem CommentItem = new JMenuItem();
-
-
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     public ProcessWindow(String name)     // make an empty window
     {
         super(name);
-        if(Application.frame.NewWindowOffset + Configuration.PROCESSWINDOW_DEFAULTWIDTH > Application.frame.desktop.getWidth() ||
-           Application.frame.NewWindowOffset + Configuration.PROCESSWINDOW_DEFAULTHEIGHT > Application.frame.desktop.getHeight())
-            Application.frame.NewWindowOffset = 0;
+        if (Application.frame.NewWindowOffset + Configuration.PROCESSWINDOW_DEFAULTWIDTH > Application.frame.desktop.getWidth() ||
+            Application.frame.NewWindowOffset + Configuration.PROCESSWINDOW_DEFAULTHEIGHT > Application.frame.desktop.getHeight())
+            	Application.frame.NewWindowOffset = 0;
         setBounds(Application.frame.NewWindowOffset, Application.frame.NewWindowOffset, Configuration.PROCESSWINDOW_DEFAULTWIDTH, Configuration.PROCESSWINDOW_DEFAULTHEIGHT);
         Application.frame.NewWindowOffset += Configuration.PROCESSWINDOW_OFFSETDISPLACEMENT;
         show();
@@ -44,12 +36,12 @@ public class ProcessWindow extends MyInternalFrame
         {
             jbInit();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     // load window from stream
     public ProcessWindow(BufferedReader dec) throws java.io.IOException
     {
@@ -59,7 +51,7 @@ public class ProcessWindow extends MyInternalFrame
         {                     // create layout
             jbInit();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -67,14 +59,14 @@ public class ProcessWindow extends MyInternalFrame
         flowchart.LoadFromFile(dec);
         show();
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     // save window to stream
     public void Save(PrintWriter enc) throws java.io.IOException
     {
         super.Save(enc);
         flowchart.SaveToFile(enc);
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     private void jbInit() throws Exception   // standard JBuilder auto-generated initialization routine
     {
         AssignmentItem.setText("Assignment");
@@ -159,37 +151,37 @@ public class ProcessWindow extends MyInternalFrame
             });
        
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void AssignmentItem_actionPerformed(ActionEvent e)      // add ordinary block (rectangle)
     {
         flowchart.AddBlock(MyGraphCell.GENERIC, "");
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void SemaphoreOpItem_actionPerformed(ActionEvent e)    // add semaphore op block (ordinary)
     {
         flowchart.AddBlock(MyGraphCell.GENERIC, "");
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void BranchingItem_actionPerformed(ActionEvent e)       // add branching block
     {
         flowchart.AddBlock(MyGraphCell.BRANCHING, "");
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void CommentItem_actionPerformed(ActionEvent e)    // add comment block (ordinary)
     {
         flowchart.AddBlock(MyGraphCell.GENERIC, "");
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void EndItem_actionPerformed(ActionEvent e)             // add "end" block (elliptic)
     {
         flowchart.AddBlock(MyGraphCell.BEGIN_END, "end");
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void MarkItem_actionPerformed(ActionEvent e)            // mark state as starting
     {
         flowchart.MarkAsStarting();
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     public EJGraph GetProcessGraph()                  // get jgraph surface
     {
         return flowchart;

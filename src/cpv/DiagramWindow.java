@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-////////////////////////////////////////////////////////////////////////////////
 public class DiagramWindow extends MyInternalFrame  // window for the state space diagram
 {
     private JPanel jPanel1 = new JPanel();                     //
@@ -16,8 +15,7 @@ public class DiagramWindow extends MyInternalFrame  // window for the state spac
     private DJGraph diagram = new DJGraph();                   //
 
     private boolean InitializePressed = false;                 // is "Initialize" button pressed?
-
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     public DiagramWindow()                                     // make a diagram window
     {
         super("State Space Diagram");
@@ -28,29 +26,18 @@ public class DiagramWindow extends MyInternalFrame  // window for the state spac
         {                                             // (JBuilder auto-generated)
             jbInit();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     // make window from the stream
     public DiagramWindow(BufferedReader dec) throws java.io.IOException
     {
         this();
-// commented: partially implemented loading (now just generate an empty window)
-/*        super(dec);
-
-        try                 // create controls (JBuilder auto-generated)
-        {
-            jbInit();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        InitializePressed = Boolean.getBoolean(dec.readLine());
+        // TODO: load diagram from file
+        /*        InitializePressed = Boolean.getBoolean(dec.readLine());
         Application.therunner.SetSurface(diagram); // set diagram as surface for Runner module output
 
         if(InitializePressed)       // if diagram is already initialized, load it from stream
@@ -61,7 +48,7 @@ public class DiagramWindow extends MyInternalFrame  // window for the state spac
         }
         show();*/
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     private void jbInit() throws Exception       // JBuilder auto-generated initialization routine
     {
         InitializeButton.setText("Initialize");
@@ -91,8 +78,8 @@ public class DiagramWindow extends MyInternalFrame  // window for the state spac
         {
             public void mousePressed(MouseEvent e)
             {
-                if(e.getClickCount() == 2)       // if doubleclick
-                {                                // find an underlying cell
+                if (e.getClickCount() == 2)       // if doubleclick
+                {                                 // find an underlying cell
                     Object cell = diagram.getFirstCellForLocation(e.getX(), e.getY());
                     if (cell != null)            // expand this cell
                         Application.therunner.ExpandState(diagram.convertValueToString(cell));
@@ -100,11 +87,11 @@ public class DiagramWindow extends MyInternalFrame  // window for the state spac
             }
         });
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     // save window to the stream
     public void Save(PrintWriter enc) throws java.io.IOException
     {
-// commented: partially implemented saving
+    	// TODO: save diagram into a stream
 /*        super.Save(enc);
         enc.println(InitializePressed);           // save initialized flag
         if(InitializePressed)                     // if diagram is initialized
@@ -114,7 +101,7 @@ public class DiagramWindow extends MyInternalFrame  // window for the state spac
             Application.therunner.SaveToFile(enc);       // save ILRunner state
         }*/
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     // Initialize button pressed
     void InitializeButton_actionPerformed(ActionEvent e)
     {
@@ -123,20 +110,20 @@ public class DiagramWindow extends MyInternalFrame  // window for the state spac
             Application.therunner.Initialize(Application.theprogram.GetILRepresentation());
             InitializePressed = true;
         }
-        catch(SyntaxErrorException ex)   // on error show message
+        catch (SyntaxErrorException ex)   // on error show message
         {
             JOptionPane.showMessageDialog(Application.frame, ex.getMessage());
         }
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     // Expand (all) button pressed
     void ExpandButton_actionPerformed(ActionEvent e)
     {
-        if(!InitializePressed)				// cannot expand without initialization
+        if (!InitializePressed)				// cannot expand without initialization
             InitializeButton_actionPerformed(e);    // initialize
 
-        if(InitializePressed)                  // if no exception occurs
+        if (InitializePressed)                  // if no exception occurs
             Application.therunner.ExpandAll();
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 }

@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Configuration
 {
-	public static final String SOFTWARE_NAME = "CPV 1.0";
+	public static final String SOFTWARE_NAME = "CPV 1.0.1";
 	public static final String DJGRAPH_FONT_FAMILY = "Lucida Sans Typewriter";
     public static final int DJGRAPH_FONT_SIZE  = 3;  // note this is is HMTL font size
     

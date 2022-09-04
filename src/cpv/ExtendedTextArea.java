@@ -4,9 +4,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
-////////////////////////////////////////////////////////////////////////////////
 // JTextArea with fast templates implementation
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 public class ExtendedTextArea extends JTextArea
 {
     private JPopupMenu jPopupMenu1 = new JPopupMenu();
@@ -14,7 +13,7 @@ public class ExtendedTextArea extends JTextArea
     private JMenuItem BooleanItem = new JMenuItem();
     private JMenuItem SemaphoreItem = new JMenuItem();
 
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     public ExtendedTextArea()
     {
         super();
@@ -22,7 +21,7 @@ public class ExtendedTextArea extends JTextArea
         {
             jbInit();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -33,13 +32,13 @@ public class ExtendedTextArea extends JTextArea
         {
             public void mouseClicked(MouseEvent e)
             {
-                if(SwingUtilities.isRightMouseButton(e))
+                if (SwingUtilities.isRightMouseButton(e))
                     jPopupMenu1.show(textarea, e.getX(), e.getY());
             }
 
         });
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     private void jbInit() throws Exception      // initialization routine
     {
         IntegerItem.setActionCommand("Integer");
@@ -68,25 +67,25 @@ public class ExtendedTextArea extends JTextArea
         jPopupMenu1.add(BooleanItem);
         jPopupMenu1.add(SemaphoreItem);
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void IntegerItem_actionPerformed(ActionEvent e)   // integer variable template
     {
         insert("VarName : integer(MinValue..MaxValue) := InitValue;", getCaretPosition());
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void BooleanItem_actionPerformed(ActionEvent e)    // boolean variable template
     {
         insert("VarName : boolean := InitValue;", getCaretPosition());
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
     void SemaphoreItem_actionPerformed(ActionEvent e)   // semaphore variable template
     {
         insert("VarName : semaphore := InitValue;", getCaretPosition());
     }
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 	public void ShowPopupMenu()
 	{
 		jPopupMenu1.show(this, 0, 0);
 	}
-////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------
 }
