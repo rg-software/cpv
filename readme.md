@@ -2,7 +2,7 @@
 
 The purpose of CPV software is verification of concurrent programs. Designing and debugging an ordinary sequential program is already nontrivial task, and it is even more difficult to deal with concurrent programs. Concurrent Program Verifier can help you to understand the nature of concurrent programming, to play with concurrent behavior and, possibly, to avoid some common obstacles in real projects.
 
-![](cpv.png)
+![CPV](cpv.png)
 
 Concurrent Program Verifier is not an enterprise-level system; it is designed for educational purposes only. CPV allows you to perform two basic tasks:
 
@@ -41,17 +41,33 @@ any state.
 
 ## Building and running CPV
 
-For building, use `build.bat`. The current version of CPV was created for Java 1.4 (released in 2002) and uses a third-party component JGraph v2.1 (included into the package as `jgraph.jar`). This version of JGraph is incompatible with modern Java, so a [newer release](https://github.com/jgraph/jgraphx) should be tested with CPV eventually.
+For building, use `build.bat`.
+
+The original version of CPV was created for Java 1.4 (released in 2002) and used a third-party component JGraph v2.1. The current release is a slightly refactored update based on JGraph 5 (2009). It works with any recent Java version and features modern look and feel FlatLaf.
 
 Use `run.bat` to run CPV.
 
+Unfortunately, CPV is still not HDPI-aware, so its interface might look blurry, pixelated, or too small on a modern computer. Depending on your situation, you can try custom UI scaling or disabling it at all:
 
-## Licensing
-Copyright 2002, 2003 by Maxim Mozgovoy and Mordechai (Moti) Ben-Ari.
+```text
+# disable scaling
+java.exe -Dsun.java2d.uiScale.enabled=false -jar build/cpv.jar
+
+# custom scale factor 1.25
+java.exe -Dsun.java2d.uiScale=1.25 -jar build/cpv.jar
+```
+
+## Third-party Components
 
 This software uses:
-JGraph, Copyright 2001 by Gaudenz Alder under the GNU Lesser Public License.
-The source code of JGraph is obtainable from www.jgraph.org.
+
+* JGraph 5, (c) 2001-2009, JGraph Ltd. [The sources](https://github.com/jgraph/legacy-jgraph5) are available under the BSD license.
+
+* FlatLaf 2.4. [The sources](https://github.com/JFormDesigner/FlatLaf) are available under the Apache 2.0 license.
+
+## Licensing
+
+Copyright 2003, 2022 by Maxim Mozgovoy and Mordechai (Moti) Ben-Ari.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -67,15 +83,3 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 02111-1307, USA.
-
-## TODO:
-
-Add flatlf
- https://www.formdev.com/flatlaf/
-Install themes
-https://github.com/JFormDesigner/FlatLaf/tree/main/flatlaf-intellij-themes#themes
-https://www.formdev.com/flatlaf/themes/
-Also, Jgraph 5
-https://github.com/jgraph/legacy-jgraph5
-
-java.exe" -Dsun.java2d.uiScale.enabled=false  -jar cpv.jar
